@@ -368,7 +368,7 @@ def collect_single_video_media(
                 }
             )
 
-    videos = extracted.get("videos") if isinstance(extracted.get("videos"), list) else []
+    videos = extracted.get("videos", []) if isinstance(extracted.get("videos"), list) else []
     for index, media_url in enumerate(videos, start=1):
         if not isinstance(media_url, str) or not media_url.strip():
             continue
@@ -391,7 +391,7 @@ def collect_single_video_media(
                 }
             )
 
-    images = extracted.get("images") if isinstance(extracted.get("images"), list) else []
+    images = extracted.get("images", []) if isinstance(extracted.get("images"), list) else []
     for index, image_url in enumerate(images, start=1):
         if not isinstance(image_url, str) or not image_url.strip():
             continue

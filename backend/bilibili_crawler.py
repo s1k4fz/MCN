@@ -53,7 +53,7 @@ class BilibiliCrawler:
         try:
             resp = self.session.get("https://api.bilibili.com/x/web-interface/nav", timeout=20)
             payload = resp.json()
-            data = payload.get("data") if isinstance(payload, dict) else {}
+            data = payload.get("data", {}) if isinstance(payload, dict) else {}
             self.is_logged_in = bool(data.get("isLogin"))
             self.login_user = data.get("uname")
             if self.is_logged_in:
@@ -445,7 +445,7 @@ class BilibiliCrawler:
                 if qid is not None and label:
                     quality_label_map[self._safe_int(qid)] = str(label)
 
-        dash = play_data.get("dash") if isinstance(play_data.get("dash"), dict) else {}
+        dash = play_data.get("dash", {}) if isinstance(play_data.get("dash"), dict) else {}
         best_video = self._pick_best_dash_video(dash.get("video"))
         best_audio = self._pick_best_dash_audio(dash.get("audio"))
 

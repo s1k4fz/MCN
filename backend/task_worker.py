@@ -27,7 +27,7 @@ def _normalize_links(raw_links: Any) -> list[str]:
 
 
 def _run_collect_single_work_task(task_id: str, task: dict[str, Any]) -> None:
-    payload = task.get("payload") if isinstance(task.get("payload"), dict) else {}
+    payload = task.get("payload", {}) if isinstance(task.get("payload"), dict) else {}
     links = _normalize_links(payload.get("links"))
     title = str(payload.get("title") or "").strip() or None
     description = str(payload.get("description") or "").strip() or None
@@ -100,7 +100,7 @@ def _run_collect_single_work_task(task_id: str, task: dict[str, Any]) -> None:
 
 
 def _run_collect_author_task(task_id: str, task: dict[str, Any]) -> None:
-    payload = task.get("payload") if isinstance(task.get("payload"), dict) else {}
+    payload = task.get("payload", {}) if isinstance(task.get("payload"), dict) else {}
     platform = normalize_platform_type(payload.get("platform"))
     collect_action = str(payload.get("collect_action") or "").strip().lower()
     uids = _normalize_links(payload.get("uids"))
@@ -222,7 +222,7 @@ def _run_collect_author_task(task_id: str, task: dict[str, Any]) -> None:
 
 
 def _run_selective_download_task(task_id: str, task: dict[str, Any]) -> None:
-    payload = task.get("payload") if isinstance(task.get("payload"), dict) else {}
+    payload = task.get("payload", {}) if isinstance(task.get("payload"), dict) else {}
     platform = normalize_platform_type(payload.get("platform"))
     author_uid = str(payload.get("author_uid") or "").strip()
     selected_video_folders = _normalize_links(payload.get("selected_video_folders"))

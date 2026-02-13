@@ -333,7 +333,7 @@ def read_worker_log_lines(task_id: str) -> list[str]:
 
 def build_task_full_logs(task: dict[str, Any]) -> list[str]:
     task_id = str(task.get("id") or "").strip()
-    task_logs = task.get("logs") if isinstance(task.get("logs"), list) else []
+    task_logs = task.get("logs", []) if isinstance(task.get("logs"), list) else []
     normalized_task_logs = [str(item) for item in task_logs if str(item).strip()]
     worker_logs = read_worker_log_lines(task_id) if task_id else []
     # 不做去重，确保任何日志都不丢失。
