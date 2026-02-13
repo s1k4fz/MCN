@@ -1,7 +1,0 @@
-export { DailyFocusColumn } from "./daily-focus-column"
-export { DashboardSidebar } from "./sidebar"
-export { QuickStart } from "./quick-start"
-export { TaskCard } from "./task-card"
-export { TaskColumn } from "./task-column"
-export { WelcomeHeader } from "./welcome-header"
-export { WeeklySchedule } from "./weekly-schedule"
