@@ -134,9 +134,9 @@ export function AccountMainContent() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-11 shrink-0 items-center justify-between border-b border-white/[0.08] px-5">
+      <div className="flex h-11 shrink-0 items-center justify-between border-b border-white/8 px-5">
         <div className="flex items-center gap-0.5">
-          <button className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/[0.05]">
+          <button className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/5">
             <SlidersHorizontal className="size-3.5" />
             <span>筛选</span>
           </button>
@@ -152,8 +152,8 @@ export function AccountMainContent() {
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium transition-colors duration-100",
                   isActive
-                    ? "bg-white/[0.10] text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04]"
+                    ? "bg-white/10 text-zinc-100"
+                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/4"
                 )}
               >
                 <Icon className="size-3.5" />
@@ -189,7 +189,7 @@ export function AccountMainContent() {
                     onOpenChange={(open) =>
                       setOpenMap((prev) => ({ ...prev, [drawer.id]: open }))
                     }
-                    className="border-b border-white/[0.05] first:border-t first:border-white/[0.05]"
+                    className="border-b border-white/5 first:border-t first:border-white/5"
                   >
                     <CollapsibleTrigger asChild>
                       <button className="flex h-11 w-full items-center bg-black/45 px-5 text-left transition-colors hover:bg-black/35">
@@ -215,9 +215,9 @@ export function AccountMainContent() {
                           : "grid-rows-[0fr] opacity-0"
                       )}
                     >
-                      <div className="overflow-hidden border-t border-white/[0.05] bg-white/[0.01]">
+                      <div className="overflow-hidden border-t border-white/5 bg-white/1">
                         {accounts.length > 0 ? (
-                          <ul className="divide-y divide-white/[0.05]">
+                          <ul className="divide-y divide-white/5">
                             {accounts.map((account) => {
                               const isSelected = selectedAccountId === account.id
 
@@ -231,8 +231,8 @@ export function AccountMainContent() {
                                       )
                                     }
                                     className={cn(
-                                      "flex h-11 w-full items-center justify-between px-5 text-left transition-colors hover:bg-white/[0.025]",
-                                      isSelected && "bg-white/[0.05]"
+                                      "flex h-11 w-full items-center justify-between px-5 text-left transition-colors hover:bg-white/2.5",
+                                      isSelected && "bg-white/5"
                                     )}
                                   >
                                     <div className="min-w-0 pr-3">
@@ -274,8 +274,8 @@ export function AccountMainContent() {
 
             <aside
               className={cn(
-                "min-h-0 shrink-0 overflow-hidden border-l border-white/[0.06] bg-black/30 transition-[width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                selectedAccount ? "w-[360px] xl:w-[420px] opacity-100" : "w-0 opacity-0"
+                "min-h-0 shrink-0 overflow-hidden border-l border-white/6 bg-black/30 transition-[width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                selectedAccount ? "w-90 xl:w-105 opacity-100" : "w-0 opacity-0"
               )}
             >
               <div
@@ -288,7 +288,7 @@ export function AccountMainContent() {
               >
                 {selectedAccount && (
                   <div className="flex min-h-0 h-full flex-col">
-                    <div className="flex items-start justify-between border-b border-white/[0.06] pb-3">
+                    <div className="flex items-start justify-between border-b border-white/6 pb-3">
                       <div className="pr-3">
                         <p className="text-sm text-zinc-100">{selectedAccount.name}</p>
                         <p className="mt-1 text-xs leading-relaxed text-zinc-500">
@@ -298,7 +298,7 @@ export function AccountMainContent() {
                       <button
                         type="button"
                         onClick={() => setSelectedAccountId(null)}
-                        className="inline-flex size-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-300"
+                        className="inline-flex size-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-white/4 hover:text-zinc-300"
                         aria-label="关闭账号详情面板"
                       >
                         <X className="size-4" />
@@ -321,7 +321,7 @@ export function AccountMainContent() {
                         </div>
                       </div>
 
-                      <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-black/35 p-3">
+                      <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/8 bg-black/35 p-3">
                         <p className="text-[11px] uppercase tracking-[0.12em] text-zinc-500">
                           账号备注
                         </p>

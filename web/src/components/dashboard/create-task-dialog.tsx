@@ -202,8 +202,8 @@ export function CreateTaskDialog({
                 className={cn(
                   "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                   taskType === "collect"
-                    ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                    : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                    ? "border-white/30 bg-white/10 text-zinc-100"
+                    : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                 )}
               >
                 <ScanSearch className="size-3.5 shrink-0" />
@@ -219,8 +219,8 @@ export function CreateTaskDialog({
                 className={cn(
                   "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                   taskType === "publish"
-                    ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                    : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                    ? "border-white/30 bg-white/10 text-zinc-100"
+                    : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                 )}
               >
                 <Send className="size-3.5 shrink-0" />
@@ -243,8 +243,8 @@ export function CreateTaskDialog({
                   className={cn(
                     "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                     collectMode === "single-work"
-                      ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                      : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                      ? "border-white/30 bg-white/10 text-zinc-100"
+                      : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                   )}
                 >
                   <FileVideo className="size-3.5 shrink-0" />
@@ -259,8 +259,8 @@ export function CreateTaskDialog({
                   className={cn(
                     "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                     collectMode === "author"
-                      ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                      : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                      ? "border-white/30 bg-white/10 text-zinc-100"
+                      : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                   )}
                 >
                   <UserRound className="size-3.5 shrink-0" />
@@ -283,8 +283,8 @@ export function CreateTaskDialog({
                     className={cn(
                       "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                       authorPlatform === "bilibili"
-                        ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                        : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                        ? "border-white/30 bg-white/10 text-zinc-100"
+                        : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                     )}
                   >
                     <CircleDot className="size-3.5 shrink-0" />
@@ -294,7 +294,7 @@ export function CreateTaskDialog({
                   <button
                     type="button"
                     disabled
-                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/[0.08] px-3 text-[13px] text-zinc-600 opacity-70"
+                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/8 px-3 text-[13px] text-zinc-600 opacity-70"
                   >
                     <CircleDot className="size-3.5 shrink-0" />
                     <span>抖音（暂未支持）</span>
@@ -303,7 +303,7 @@ export function CreateTaskDialog({
                   <button
                     type="button"
                     disabled
-                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/[0.08] px-3 text-[13px] text-zinc-600 opacity-70"
+                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/8 px-3 text-[13px] text-zinc-600 opacity-70"
                   >
                     <CircleDot className="size-3.5 shrink-0" />
                     <span>小红书（暂未支持）</span>
@@ -323,8 +323,8 @@ export function CreateTaskDialog({
                       className={cn(
                         "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                         authorCollectAction === "data-only"
-                          ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                          : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                          ? "border-white/30 bg-white/10 text-zinc-100"
+                          : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                       )}
                     >
                       <Database className="size-3.5 shrink-0" />
@@ -337,8 +337,8 @@ export function CreateTaskDialog({
                       className={cn(
                         "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
                         authorCollectAction === "collect-download"
-                          ? "border-white/30 bg-white/[0.10] text-zinc-100"
-                          : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                          ? "border-white/30 bg-white/10 text-zinc-100"
+                          : "border-white/12 text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                       )}
                     >
                       <Download className="size-3.5 shrink-0" />
@@ -357,7 +357,7 @@ export function CreateTaskDialog({
                     <button
                       type="button"
                       onClick={addAuthorUidField}
-                      className="inline-flex h-7 items-center gap-1 rounded-full border border-white/[0.12] px-2.5 text-xs text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-zinc-200"
+                      className="inline-flex h-7 items-center gap-1 rounded-full border border-white/12 px-2.5 text-xs text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
                     >
                       <Plus className="size-3.5" />
                       <span>添加</span>
@@ -370,12 +370,12 @@ export function CreateTaskDialog({
                           value={uid}
                           onChange={(event) => updateAuthorUid(index, event.target.value)}
                           placeholder={`请输入作者 UID ${index + 1}`}
-                          className="h-9 w-full rounded-full border border-white/[0.12] bg-white/[0.03] px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
+                          className="h-9 w-full rounded-full border border-white/12 bg-white/3 px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/22 focus:bg-white/6"
                         />
                         <button
                           type="button"
                           onClick={() => removeAuthorUidField(index)}
-                          className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.12] text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/12 text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
                           disabled={authorUids.length === 1}
                           aria-label="删除该作者 UID 输入框"
                         >
@@ -398,7 +398,7 @@ export function CreateTaskDialog({
                 <button
                   type="button"
                   onClick={addWorkLinkField}
-                  className="inline-flex h-7 items-center gap-1 rounded-full border border-white/[0.12] px-2.5 text-xs text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-zinc-200"
+                  className="inline-flex h-7 items-center gap-1 rounded-full border border-white/12 px-2.5 text-xs text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
                 >
                   <Plus className="size-3.5" />
                   <span>添加</span>
@@ -411,12 +411,12 @@ export function CreateTaskDialog({
                       value={link}
                       onChange={(event) => updateWorkLink(index, event.target.value)}
                       placeholder={`请输入作品链接 ${index + 1}`}
-                      className="h-9 w-full rounded-full border border-white/[0.12] bg-white/[0.03] px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
+                      className="h-9 w-full rounded-full border border-white/12 bg-white/3 px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/22 focus:bg-white/6"
                     />
                     <button
                       type="button"
                       onClick={() => removeWorkLinkField(index)}
-                      className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.12] text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-white/12 text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
                       disabled={workLinks.length === 1}
                       aria-label="删除该作品链接输入框"
                     >
@@ -438,20 +438,20 @@ export function CreateTaskDialog({
                   value={taskTitle}
                   onChange={(event) => setTaskTitle(event.target.value)}
                   placeholder={`任务标题（留空默认：${defaultTaskMeta.title}）`}
-                  className="h-9 w-full rounded-full border border-white/[0.12] bg-white/[0.03] px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
+                  className="h-9 w-full rounded-full border border-white/12 bg-white/3 px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/22 focus:bg-white/6"
                 />
                 <input
                   value={taskDescription}
                   onChange={(event) => setTaskDescription(event.target.value)}
                   placeholder={`任务描述（留空默认：${defaultTaskMeta.description}）`}
-                  className="h-9 w-full rounded-full border border-white/[0.12] bg-white/[0.03] px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
+                  className="h-9 w-full rounded-full border border-white/12 bg-white/3 px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/22 focus:bg-white/6"
                 />
               </div>
             </div>
           )}
 
           {taskType === "publish" && (
-            <div className="rounded-md border border-white/10 bg-white/[0.03] px-3 py-2">
+            <div className="rounded-md border border-white/10 bg-white/3 px-3 py-2">
               <p className="text-xs text-zinc-400">
                 发布任务配置将在下一步开发，目前先完成任务类型选择。
               </p>
@@ -468,7 +468,7 @@ export function CreateTaskDialog({
         <DialogFooter>
           <Button
             variant="ghost"
-            className="h-8 rounded-full border border-white/[0.12] px-4 hover:bg-white/[0.05]"
+            className="h-8 rounded-full border border-white/12 px-4 hover:bg-white/5"
             onClick={() => handleClose(false)}
             disabled={isSubmitting}
           >

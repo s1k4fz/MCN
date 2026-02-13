@@ -98,9 +98,9 @@ export function TaskFilterBar() {
 
   return (
     <>
-      <div className="flex h-11 shrink-0 items-center justify-between border-b border-white/[0.08] px-5">
+      <div className="flex h-11 shrink-0 items-center justify-between border-b border-white/8 px-5">
         <div className="flex items-center gap-0.5">
-          <button className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/[0.05]">
+          <button className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/5">
             <SlidersHorizontal className="size-3.5" />
             <span>筛选</span>
           </button>
@@ -115,8 +115,8 @@ export function TaskFilterBar() {
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium transition-colors duration-100",
                   isActive
-                    ? "bg-white/[0.10] text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04]"
+                    ? "bg-white/10 text-zinc-100"
+                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/4"
                 )}
               >
                 <Icon className="size-3.5" />

@@ -324,7 +324,7 @@ export function TaskStatusDrawers() {
       disposed = true
       window.clearInterval(timer)
     }
-  }, [selectedTaskMeta?.task.backendTaskId])
+  }, [selectedTaskMeta, selectedTaskMeta?.task.backendTaskId])
 
   useEffect(() => {
     if (!logViewportRef.current) return
@@ -371,7 +371,7 @@ export function TaskStatusDrawers() {
                 onOpenChange={(open) =>
                   setOpenMap((prev) => ({ ...prev, [drawer.id]: open }))
                 }
-                className="border-b border-white/[0.05] first:border-t first:border-white/[0.05]"
+                className="border-b border-white/5 first:border-t first:border-white/5"
               >
                 <CollapsibleTrigger asChild>
                   <button className="flex h-11 w-full items-center bg-black/45 px-5 text-left transition-colors hover:bg-black/35">
@@ -399,9 +399,9 @@ export function TaskStatusDrawers() {
                       : "grid-rows-[0fr] opacity-0"
                   )}
                 >
-                  <div className="overflow-hidden border-t border-white/[0.05] bg-white/[0.01]">
+                  <div className="overflow-hidden border-t border-white/5 bg-white/1">
                     {tasks.length > 0 ? (
-                      <ul className="divide-y divide-white/[0.05]">
+                      <ul className="divide-y divide-white/5">
                         {tasks.map((task) => {
                           const isSelected = selectedTaskId === task.id
 
@@ -415,8 +415,8 @@ export function TaskStatusDrawers() {
                                   )
                                 }
                                 className={cn(
-                                  "flex h-11 w-full items-center justify-between px-5 text-left transition-colors hover:bg-white/[0.025]",
-                                  isSelected && "bg-white/[0.05]"
+                                  "flex h-11 w-full items-center justify-between px-5 text-left transition-colors hover:bg-white/2.5",
+                                  isSelected && "bg-white/5"
                                 )}
                               >
                                 <div className="min-w-0 pr-3">
@@ -458,8 +458,8 @@ export function TaskStatusDrawers() {
 
         <aside
           className={cn(
-            "min-h-0 shrink-0 overflow-hidden border-l border-white/[0.06] bg-black/30 transition-[width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            selectedTaskMeta ? "w-[360px] xl:w-[420px] opacity-100" : "w-0 opacity-0"
+            "min-h-0 shrink-0 overflow-hidden border-l border-white/6 bg-black/30 transition-[width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            selectedTaskMeta ? "w-90 xl:w-105 opacity-100" : "w-0 opacity-0"
           )}
         >
           <div
@@ -470,7 +470,7 @@ export function TaskStatusDrawers() {
           >
             {selectedTaskMeta && (
               <div className="flex min-h-0 h-full flex-col">
-                <div className="flex items-start justify-between border-b border-white/[0.06] pb-3">
+                <div className="flex items-start justify-between border-b border-white/6 pb-3">
                   <div className="pr-3">
                     <p className="text-sm text-zinc-100">{selectedTaskMeta.task.name}</p>
                     <p className="mt-1 text-xs leading-relaxed text-zinc-500">
@@ -480,7 +480,7 @@ export function TaskStatusDrawers() {
                   <button
                     type="button"
                     onClick={() => setSelectedTaskId(null)}
-                    className="inline-flex size-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-300"
+                    className="inline-flex size-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-white/4 hover:text-zinc-300"
                     aria-label="关闭详情面板"
                   >
                     <X className="size-4" />
@@ -510,7 +510,7 @@ export function TaskStatusDrawers() {
                       <span>执行进度</span>
                       <span>{selectedTaskMeta.task.progressText}</span>
                     </div>
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.08]">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/8">
                       <div
                         className={cn(
                           "h-full rounded-full transition-[width] duration-300",
@@ -521,7 +521,7 @@ export function TaskStatusDrawers() {
                     </div>
                   </div>
 
-                  <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-black/35 p-3">
+                  <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/8 bg-black/35 p-3">
                     <p className="text-[11px] uppercase tracking-[0.12em] text-zinc-500">
                       执行日志
                     </p>

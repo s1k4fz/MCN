@@ -378,9 +378,9 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-11 shrink-0 items-center justify-between border-b border-white/[0.08] px-5">
+      <div className="flex h-11 shrink-0 items-center justify-between border-b border-white/8 px-5">
         <div className="flex items-center gap-0.5">
-          <button className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/[0.05]">
+          <button className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/5">
             <SlidersHorizontal className="size-3.5" />
             <span>筛选</span>
           </button>
@@ -389,8 +389,8 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
             className={cn(
               "mr-1 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] font-medium transition-colors duration-100",
               selectMode
-                ? "border-white/[0.26] bg-white/[0.10] text-zinc-100"
-                : "border-white/[0.12] text-zinc-300 hover:bg-white/[0.05]"
+                ? "border-white/26 bg-white/10 text-zinc-100"
+                : "border-white/12 text-zinc-300 hover:bg-white/5"
             )}
           >
             <span>{selectMode ? "退出选择" : "选择"}</span>
@@ -398,7 +398,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
           {selectMode && (
             <button
               onClick={handleToggleSelectAll}
-              className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/[0.05]"
+              className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1 text-[13px] font-medium text-zinc-300 transition-colors duration-100 hover:bg-white/5"
             >
               <span>{allVisibleSelected ? "取消全选" : "全选"}</span>
             </button>
@@ -414,8 +414,8 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium transition-colors duration-100",
                   isActive
-                    ? "bg-white/[0.10] text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04]"
+                    ? "bg-white/10 text-zinc-100"
+                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/4"
                 )}
               >
                 <Icon className="size-3.5" />
@@ -477,7 +477,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
                     onOpenChange={(open) =>
                       setOpenMap((prev) => ({ ...prev, [drawer.id]: open }))
                     }
-                    className="border-b border-white/[0.05] first:border-t first:border-white/[0.05]"
+                    className="border-b border-white/5 first:border-t first:border-white/5"
                   >
                     <CollapsibleTrigger asChild>
                       <button className="flex h-11 w-full items-center bg-black/45 px-5 text-left transition-colors hover:bg-black/35">
@@ -503,9 +503,9 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
                           : "grid-rows-[0fr] opacity-0"
                       )}
                     >
-                      <div className="overflow-hidden border-t border-white/[0.05] bg-white/[0.01]">
+                      <div className="overflow-hidden border-t border-white/5 bg-white/1">
                         {proxies.length > 0 ? (
-                          <ul className="divide-y divide-white/[0.05]">
+                          <ul className="divide-y divide-white/5">
                             {proxies.map((proxy) => {
                               const isSelected = selectMode
                                 ? selectedProxyIds.includes(proxy.id)
@@ -528,8 +528,8 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
                                       )
                                     }}
                                     className={cn(
-                                      "flex h-11 w-full items-center justify-between px-5 text-left transition-colors hover:bg-white/[0.025]",
-                                      isSelected && "bg-white/[0.05]"
+                                      "flex h-11 w-full items-center justify-between px-5 text-left transition-colors hover:bg-white/2.5",
+                                      isSelected && "bg-white/5"
                                     )}
                                   >
                                     <div className="min-w-0 pr-3">
@@ -591,8 +591,8 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
 
             <aside
               className={cn(
-                "min-h-0 shrink-0 overflow-hidden border-l border-white/[0.06] bg-black/30 transition-[width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                selectedProxy ? "w-[360px] xl:w-[420px] opacity-100" : "w-0 opacity-0"
+                "min-h-0 shrink-0 overflow-hidden border-l border-white/6 bg-black/30 transition-[width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                selectedProxy ? "w-90 xl:w-105 opacity-100" : "w-0 opacity-0"
               )}
             >
               <div
@@ -603,7 +603,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
               >
                 {selectedProxy && (
                   <div className="flex min-h-0 h-full flex-col">
-                    <div className="flex items-start justify-between border-b border-white/[0.06] pb-3">
+                    <div className="flex items-start justify-between border-b border-white/6 pb-3">
                       <div className="pr-3">
                         <p className="text-sm text-zinc-100">{selectedProxy.endpoint}</p>
                         <p className="mt-1 text-xs leading-relaxed text-zinc-500">
@@ -613,7 +613,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
                       <button
                         type="button"
                         onClick={() => setSelectedProxyId(null)}
-                        className="inline-flex size-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-300"
+                        className="inline-flex size-7 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-white/4 hover:text-zinc-300"
                         aria-label="关闭代理详情面板"
                       >
                         <X className="size-4" />
@@ -670,7 +670,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
                         )}
                       </div>
 
-                      <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-black/35 p-3">
+                      <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/8 bg-black/35 p-3">
                         <p className="text-[11px] uppercase tracking-[0.12em] text-zinc-500">
                           代理备注
                         </p>

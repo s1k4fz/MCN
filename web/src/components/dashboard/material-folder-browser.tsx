@@ -450,7 +450,7 @@ export function MaterialFolderBrowser({
   return (
     <div className="flex h-full overflow-hidden">
       <section className="min-w-0 flex-1 overflow-auto">
-        <ul className="divide-y divide-white/[0.05] border-y border-white/[0.05]">
+        <ul className="divide-y divide-white/5 border-y border-white/5">
           {rootFolders.map((folder) => {
             const isActive = activeRootId === folder.id
             return (
@@ -467,7 +467,7 @@ export function MaterialFolderBrowser({
                   }}
                   className={cn(
                     "flex h-11 w-full items-center justify-between px-5 text-left transition-colors",
-                    isActive ? "bg-white/[0.05]" : "hover:bg-white/[0.025]"
+                    isActive ? "bg-white/5" : "hover:bg-white/2.5"
                   )}
                 >
                   <span className="flex min-w-0 items-center gap-2.5 text-sm text-zinc-200">
@@ -494,8 +494,8 @@ export function MaterialFolderBrowser({
 
       <aside
         className={cn(
-          "shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/25 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          activeRoot ? "w-[340px] opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-2"
+          "shrink-0 overflow-hidden border-l border-white/5 bg-black/25 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          activeRoot ? "w-85 opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-2"
         )}
       >
         <div
@@ -505,7 +505,7 @@ export function MaterialFolderBrowser({
           )}
         >
           {activeRoot && (
-            <ul className="divide-y divide-white/[0.05] border-y border-white/[0.05]">
+            <ul className="divide-y divide-white/5 border-y border-white/5">
               {activeRoot.children.map((child) => {
                 const isNestedAuthorFolder = isAuthorNestedSubfolder(
                   activeRoot.id,
@@ -541,8 +541,8 @@ export function MaterialFolderBrowser({
                       className={cn(
                         "flex h-11 w-full items-center justify-between px-5 text-left text-sm transition-colors",
                         isActive || isNestedExpanded || hasNestedAuthorSelected
-                          ? "bg-white/[0.05] text-zinc-200"
-                          : "text-zinc-300 hover:bg-white/[0.025]"
+                          ? "bg-white/5 text-zinc-200"
+                          : "text-zinc-300 hover:bg-white/2.5"
                       )}
                     >
                       <span className="flex min-w-0 items-center gap-2.5">
@@ -565,7 +565,7 @@ export function MaterialFolderBrowser({
                     </button>
 
                     {isNestedAuthorFolder && isNestedExpanded && (
-                      <ul className="divide-y divide-white/[0.04] border-t border-white/[0.05] bg-black/30">
+                      <ul className="divide-y divide-white/4 border-t border-white/5 bg-black/30">
                         {child.children.length > 0 ? (
                           child.children.map((authorFolder) => {
                             const isAuthorActive =
@@ -593,8 +593,8 @@ export function MaterialFolderBrowser({
                                   className={cn(
                                     "flex h-10 w-full items-center justify-between pl-10 pr-5 text-left text-sm transition-colors",
                                     isAuthorActive
-                                      ? "bg-white/[0.06] text-zinc-100"
-                                      : "text-zinc-300 hover:bg-white/[0.03]"
+                                      ? "bg-white/6 text-zinc-100"
+                                      : "text-zinc-300 hover:bg-white/3"
                                   )}
                                 >
                                   <span className="flex min-w-0 items-center gap-2.5">
@@ -656,9 +656,9 @@ export function MaterialFolderBrowser({
 
       <aside
         className={cn(
-          "shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/20 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "shrink-0 overflow-hidden border-l border-white/5 bg-black/20 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           showRightPanel
-            ? "w-[360px] opacity-100 translate-x-0"
+            ? "w-90 opacity-100 translate-x-0"
             : "w-0 opacity-0 translate-x-2"
         )}
       >
@@ -671,7 +671,7 @@ export function MaterialFolderBrowser({
           {showRightPanel && (
             <>
               {isPendingAuthorContext && !selectMode && (
-                <div className="flex items-center justify-between border-y border-white/[0.05] bg-black/35 px-4 py-2">
+                <div className="flex items-center justify-between border-y border-white/5 bg-black/35 px-4 py-2">
                   <p className="text-xs text-zinc-400">
                     已选 {selectedPendingVideoFolders.length} 个作品
                   </p>
@@ -681,7 +681,7 @@ export function MaterialFolderBrowser({
                     disabled={
                       selectedPendingVideoFolders.length === 0 || isDownloadingSelected
                     }
-                    className="inline-flex h-7 items-center gap-1 rounded-full border border-white/[0.14] px-3 text-xs text-zinc-200 transition-colors hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-45"
+                    className="inline-flex h-7 items-center gap-1 rounded-full border border-white/14 px-3 text-xs text-zinc-200 transition-colors hover:bg-white/6 disabled:cursor-not-allowed disabled:opacity-45"
                   >
                     {isDownloadingSelected ? (
                       <Loader2 className="size-3.5 animate-spin" />
@@ -691,12 +691,12 @@ export function MaterialFolderBrowser({
                 </div>
               )}
               {actionError && (
-                <div className="border-b border-white/[0.05] px-4 py-2 text-xs text-red-300">
+                <div className="border-b border-white/5 px-4 py-2 text-xs text-red-300">
                   {actionError}
                 </div>
               )}
 
-              <ul className="divide-y divide-white/[0.05] border-b border-white/[0.05]">
+              <ul className="divide-y divide-white/5 border-b border-white/5">
                 {rightPanelFolders.length > 0 ? (
                   rightPanelFolders.map((child) => {
                     if (isPendingAuthorContext) {
@@ -725,8 +725,8 @@ export function MaterialFolderBrowser({
                             className={cn(
                               "flex h-11 w-full items-center justify-between px-5 text-left text-sm transition-colors",
                               isSelected
-                                ? "bg-white/[0.06] text-zinc-100"
-                                : "text-zinc-300 hover:bg-white/[0.03]"
+                                ? "bg-white/6 text-zinc-100"
+                                : "text-zinc-300 hover:bg-white/3"
                             )}
                           >
                             <span className="flex min-w-0 items-center gap-2.5">
@@ -784,8 +784,8 @@ export function MaterialFolderBrowser({
                           className={cn(
                             "flex h-11 w-full items-center justify-between px-5 text-left text-sm transition-colors",
                             isActive
-                              ? "bg-white/[0.05] text-zinc-200"
-                              : "text-zinc-300 hover:bg-white/[0.025]"
+                              ? "bg-white/5 text-zinc-200"
+                              : "text-zinc-300 hover:bg-white/2.5"
                           )}
                         >
                           <span className="flex min-w-0 items-center gap-2.5">
@@ -841,9 +841,9 @@ export function MaterialFolderBrowser({
 
       <aside
         className={cn(
-          "shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/15 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "shrink-0 overflow-hidden border-l border-white/5 bg-black/15 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           showFourthPanel
-            ? "w-[340px] opacity-100 translate-x-0"
+            ? "w-85 opacity-100 translate-x-0"
             : "w-0 opacity-0 translate-x-2"
         )}
       >
@@ -856,7 +856,7 @@ export function MaterialFolderBrowser({
           )}
         >
           {showFourthPanel && activeThird && (
-            <ul className="divide-y divide-white/[0.05] border-y border-white/[0.05]">
+            <ul className="divide-y divide-white/5 border-y border-white/5">
               {activeThird.children.length > 0 ? (
                 activeThird.children.map((child) => {
                   const canDeleteFile = Boolean(
@@ -875,7 +875,7 @@ export function MaterialFolderBrowser({
                         <button
                           type="button"
                           onClick={() => toggleDeleteSelection(child.relativePath!)}
-                          className="flex h-11 w-full items-center gap-2.5 px-5 text-left text-sm text-zinc-300 transition-colors hover:bg-white/[0.025]"
+                          className="flex h-11 w-full items-center gap-2.5 px-5 text-left text-sm text-zinc-300 transition-colors hover:bg-white/2.5"
                         >
                           {isFileSelectedForDelete ? (
                             <CheckCircle2 className="size-4 shrink-0 text-red-400" />
