@@ -27,7 +27,7 @@ export function MaterialMainContent() {
         onToggleSelectMode={handleToggleSelectMode}
         onDeleteSelected={handleDeleteSelected}
       />
-      <main className="flex-1 overflow-auto">
+      <main className="min-h-0 flex-1 overflow-hidden">
         <MaterialFolderBrowser
           selectMode={selectMode}
           onSelectionCountChange={setSelectedCount}

@@ -12,6 +12,12 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+# Windows 控制台默认 GBK，遇到 emoji 会崩；强制 UTF-8
+if sys.stdout and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if sys.stderr and hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(name)s] %(levelname)s %(message)s",

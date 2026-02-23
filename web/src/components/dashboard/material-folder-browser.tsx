@@ -612,7 +612,7 @@ export function MaterialFolderBrowser({
 
       <aside
         className={cn(
-          "shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/25 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "h-full shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/25 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           activeRoot ? "w-[340px] opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-2"
         )}
       >
@@ -823,7 +823,7 @@ export function MaterialFolderBrowser({
 
       <aside
         className={cn(
-          "shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/20 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "h-full shrink-0 overflow-hidden border-l border-white/[0.05] bg-black/20 transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           showRightPanel
             ? "w-[360px] opacity-100 translate-x-0"
             : "w-0 opacity-0 translate-x-2"
@@ -831,7 +831,7 @@ export function MaterialFolderBrowser({
       >
         <div
           className={cn(
-            "h-full transition-opacity duration-200",
+            "h-full overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transition-opacity duration-200",
             showRightPanel ? "opacity-100 delay-100" : "pointer-events-none opacity-0"
           )}
         >
