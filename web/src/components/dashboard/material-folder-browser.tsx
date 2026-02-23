@@ -618,7 +618,7 @@ export function MaterialFolderBrowser({
       >
         <div
           className={cn(
-            "h-full transition-opacity duration-200",
+            "h-full overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transition-opacity duration-200",
             activeRoot ? "opacity-100 delay-75" : "pointer-events-none opacity-0"
           )}
         >

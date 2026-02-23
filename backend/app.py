@@ -2380,6 +2380,102 @@ def resolve_material_path(payload: MaterialResolvePathRequest) -> dict[str, Any]
 
 
 # ==========================================================================
+# Bilibili Cookie API
+# ==========================================================================
+
+@app.post("/api/bilibili/cookie/auto-detect")
+def bilibili_cookie_auto_detect() -> dict[str, Any]:
+    """从本地 Chrome 浏览器自动提取 B 站 Cookie，并验证有效性"""
+    import logging
+    log = logging.getLogger("bilibili_cookie")
+
+    log.info("━━━ [Cookie Auto-Detect] 开始 ━━━")
+
+    try:
+        import browser_cookie3
+        log.info("[1/5] browser_cookie3 已导入")
+    except ImportError:
+        log.error("[1/5] browser_cookie3 未安装")
+        return {"success": False, "message": "缺少 browser_cookie3 依赖，请运行 pip install browser-cookie3"}
+
+    try:
+        cj = browser_cookie3.chrome(domain_name=".bilibili.com")
+        log.info("[2/5] Chrome Cookie 数据库读取成功")
+    except Exception as exc:
+        log.error(f"[2/5] Chrome Cookie 数据库读取失败: {exc}")
+        return {
+            "success": False,
+            "message": f"读取 Chrome Cookie 失败: {exc}. 请确认已在 Chrome 中登录 B 站，且 Chrome 已完全关闭。",
+        }
+
+    # 解析 cookie
+    cookies = {c.name: c.value for c in cj if c.value}
+    keys = list(cookies.keys())
+    has_sessdata = "SESSDATA" in cookies
+    has_buvid = any(k.startswith("buvid") for k in keys)
+    sessdata_preview = cookies.get("SESSDATA", "")[:12] + "..." if has_sessdata else "(无)"
+    log.info(f"[3/5] 解析完成: 共 {len(keys)} 个字段, SESSDATA={sessdata_preview}, has_buvid={has_buvid}")
+    log.info(f"[3/5] 全部 key: {keys}")
+
+    if not cookies:
+        log.warning("[3/5] 未找到任何 cookie")
+        return {"success": False, "message": "未找到 bilibili.com 的 Cookie，请确认已在 Chrome 中登录 B 站"}
+
+    if not has_sessdata and not has_buvid:
+        log.warning(f"[3/5] 缺少关键字段, 找到的 key: {keys}")
+        return {
+            "success": False,
+            "message": "找到的 Cookie 中缺少关键字段 (SESSDATA / buvid)，可能未登录",
+            "keys_found": keys,
+        }
+
+    # 验证 cookie 是否真的有效（调用 B 站导航接口）
+    cookie_str = "; ".join(f"{k}={v}" for k, v in cookies.items())
+    verify_result = {"is_login": False, "uname": None, "mid": None}
+    try:
+        import requests as _req
+        resp = _req.get(
+            "https://api.bilibili.com/x/web-interface/nav",
+            headers={
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                "Cookie": cookie_str,
+            },
+            timeout=10,
+        )
+        nav = resp.json()
+        is_login = nav.get("data", {}).get("isLogin", False)
+        uname = nav.get("data", {}).get("uname", "")
+        mid = nav.get("data", {}).get("mid", "")
+        verify_result = {"is_login": is_login, "uname": uname, "mid": mid}
+        log.info(f"[4/5] B站登录验证: isLogin={is_login}, uname={uname}, mid={mid}, http={resp.status_code}")
+    except Exception as exc:
+        log.warning(f"[4/5] B站登录验证请求失败 (不影响更新): {exc}")
+
+    # 更新 cookie
+    from bilibili_crawler import update_cookie
+    update_cookie(cookie_str)
+    log.info(f"[5/5] Cookie 已更新并持久化到 runtime/bilibili_cookie.txt")
+    log.info("━━━ [Cookie Auto-Detect] 完成 ━━━")
+
+    return {
+        "success": True,
+        "message": f"已更新，包含 {len(keys)} 个字段" + (f"，当前登录: {verify_result['uname']}" if verify_result["is_login"] else "（⚠️ 未登录状态，Cookie 可能已失效）"),
+        "keys_found": keys,
+        "key_count": len(keys),
+        "has_sessdata": has_sessdata,
+        "has_buvid": has_buvid,
+        "verify": verify_result,
+    }
+
+
+@app.get("/api/bilibili/cookie/status")
+def bilibili_cookie_status() -> dict[str, Any]:
+    """返回当前 B 站 Cookie 状态"""
+    from bilibili_crawler import get_cookie_info
+    return get_cookie_info()
+
+
+# ==========================================================================
 # Twitter Publish API
 # ==========================================================================
 

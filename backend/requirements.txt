@@ -14,3 +14,4 @@ lxml
 m3u8
 webvtt-py
 Js2Py-3.13
+browser-cookie3

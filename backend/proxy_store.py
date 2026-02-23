@@ -1,6 +1,6 @@
 import json
 import uuid
-import fcntl
+import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -52,27 +52,38 @@ def _write_list_atomic(path: Path, payload: list[dict[str, Any]]) -> None:
         raise
 
 
+_file_locks: dict[str, threading.Lock] = {}
+_meta_lock = threading.Lock()
+
+
+def _get_file_lock(path: Path) -> threading.Lock:
+    key = str(path)
+    with _meta_lock:
+        if key not in _file_locks:
+            _file_locks[key] = threading.Lock()
+        return _file_locks[key]
+
+
 def _read_and_write_locked(
     path: Path,
     mutator: Any,
 ) -> Any:
-    """带文件锁的读-改-写，防止并发写入冲突。"""
+    """带线程锁的读-改-写，防止并发写入冲突。"""
     path.parent.mkdir(parents=True, exist_ok=True)
-    lock_path = path.with_suffix(path.suffix + ".lock")
-    with open(lock_path, "w") as lock_file:
-        fcntl.flock(lock_file, fcntl.LOCK_EX)
-        try:
-            records = _read_list(path)
-            result = mutator(records)
-            if isinstance(result, tuple) and len(result) == 2:
-                new_records, return_value = result
-            else:
-                new_records = records
-                return_value = result
-            _write_list_atomic(path, new_records)
-            return return_value
-        finally:
-            fcntl.flock(lock_file, fcntl.LOCK_UN)
+    lock = _get_file_lock(path)
+    lock.acquire()
+    try:
+        records = _read_list(path)
+        result = mutator(records)
+        if isinstance(result, tuple) and len(result) == 2:
+            new_records, return_value = result
+        else:
+            new_records = records
+            return_value = result
+        _write_list_atomic(path, new_records)
+        return return_value
+    finally:
+        lock.release()
 
 
 def _normalize_protocol(value: str | None) -> str:

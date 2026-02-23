@@ -8,12 +8,43 @@ import random
 import datetime
 import re
 import json
+from pathlib import Path
 
 # ==========================================
-# 👇 可选：通过环境变量注入最新 Cookie（推荐）
-# export BILIBILI_COOKIE="..."
-DEFAULT_COOKIE = "buvid3=486F579F-D796-8201-A584-507728A4D47D23116infoc; b_nut=1754498623; _uuid=42FBDEEC-BCC3-CD76-2BC1-DDCFF1108B46623174infoc; enable_web_push=DISABLE; buvid_fp=a311bc793f6b490b4b5b789f7ae1b48f; buvid4=F6F828C5-BB21-EA53-F384-748664F84E0E23632-025080700-Zoqbs2nDRy2lpS0YeOSWEQ%3D%3D; theme-tip-show=SHOWED; rpdid=|(u)~mRml))Y0J'u~lRY)~luk; theme-avatar-tip-show=SHOWED; LIVE_BUVID=AUTO9417579297017230; theme-switch-show=SHOWED; hit-dyn-v2=1; PVID=9; lang=zh-Hans; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzEwMDY2NDcsImlhdCI6MTc3MDc0NzM4NywicGx0IjotMX0.6SQEXR6_-h9OZGs_AbWHxS0U4ghKstAtC7X_RGIBJkU; bili_ticket_expires=1771006587; bp_t_offset_402462477=1168653063573995520; CURRENT_QUALITY=0; SESSDATA=89a6fc04%2C1786488672%2C34cf9%2A21CjDhrez_WzH2znUkv8zaxIu2ORZEa2upr74p2R4s7smSIYeW0li5O9X6UEzG9NnaJ5ASVktVMVdVV250YkFENXBnand4bFZ6U21vdk9OSnhVRG9DZXl1SFlJRHBMajE2dXplYjVBOFBfaGpGeFo0LUxzVlhKN1FzdXZwbkV0b0wtdmRHbTVtMUFnIIEC; bili_jct=2db48623bde7636fe37e8f667f9a68e4; DedeUserID=2131423328; DedeUserID__ckMd5=bd86aacf41ff979e; CURRENT_FNVAL=2000; bp_t_offset_2131423328=1168659506024939520; sid=7r92jqmr; b_lsid=5475CABA_19C5428B723; home_feed_column=4; browser_resolution=839-832"
-MY_COOKIE = os.getenv("BILIBILI_COOKIE", DEFAULT_COOKIE).strip()
+# Cookie 加载: runtime 文件 → 环境变量（无硬编码）
+# ==========================================
+
+_BASE_DIR = Path(__file__).resolve().parent
+_RUNTIME_DIR = _BASE_DIR / "runtime"
+_COOKIE_FILE = _RUNTIME_DIR / "bilibili_cookie.txt"
+
+
+def _load_cookie() -> str:
+    """优先 runtime 文件 → 环境变量，未配置则返回空字符串"""
+    if _COOKIE_FILE.exists():
+        try:
+            text = _COOKIE_FILE.read_text(encoding="utf-8").strip()
+            if text:
+                return text
+        except Exception:
+            pass
+    return os.getenv("BILIBILI_COOKIE", "").strip()
+
+
+def _cookie_source() -> str:
+    """返回当前 cookie 来源标识"""
+    if _COOKIE_FILE.exists():
+        try:
+            if _COOKIE_FILE.read_text(encoding="utf-8").strip():
+                return "auto"
+        except Exception:
+            pass
+    if os.getenv("BILIBILI_COOKIE", "").strip():
+        return "env"
+    return "none"
+
+
+MY_COOKIE = _load_cookie()
 # ==========================================
 
 HEADERS = {
@@ -21,6 +52,28 @@ HEADERS = {
     "Referer": "https://www.bilibili.com/",
     "Cookie": MY_COOKIE
 }
+
+
+def update_cookie(new_cookie: str) -> None:
+    """运行时热更新 cookie（由 app.py 调用）"""
+    global MY_COOKIE
+    MY_COOKIE = new_cookie.strip()
+    HEADERS["Cookie"] = MY_COOKIE
+    _RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+    _COOKIE_FILE.write_text(MY_COOKIE, encoding="utf-8")
+
+
+def get_cookie_info() -> dict:
+    """返回当前 cookie 状态信息"""
+    keys = [k.strip().split("=")[0] for k in MY_COOKIE.split(";") if "=" in k]
+    return {
+        "is_set": bool(MY_COOKIE),
+        "source": _cookie_source(),
+        "keys": keys,
+        "key_count": len(keys),
+        "has_sessdata": any(k.upper() == "SESSDATA" for k in keys),
+        "has_buvid": any(k.startswith("buvid") for k in keys),
+    }
 
 class BilibiliCrawler:
     def __init__(self):
