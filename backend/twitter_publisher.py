@@ -1,10 +1,10 @@
 """
-Twitter Publishing Engine — uses requests.Session for proxy compatibility.
+Twitter Publishing Engine — uses curl_cffi for Chrome TLS fingerprint.
 
-Uses requests.Session (with session.proxies.update) because it is the ONLY
-HTTP method that works reliably through the user's local proxy toolchain
-(Clash/Surge/etc). httpx, aiohttp, and raw requests.get all fail with
-ProxyError 400 on HTTPS CONNECT tunneling through these proxies.
+Uses curl_cffi.requests.Session (with impersonate="chrome136") to mimic
+real Chrome browser TLS fingerprints (JA3/JA4). This is CRITICAL because
+Twitter/Cloudflare detects Python requests/httpx/aiohttp by their TLS
+fingerprint and returns 226 (anti-automation) errors.
 """
 
 import asyncio
@@ -12,6 +12,7 @@ import json
 import logging
 import math
 import mimetypes
+import random
 import time
 import traceback
 from pathlib import Path
@@ -23,7 +24,7 @@ import re
 import sys
 
 import bs4
-import requests
+from curl_cffi import requests as cffi_requests
 
 from account_store import get_account_record
 from proxy_store import (
@@ -78,35 +79,45 @@ TWITTER_BEARER_TOKEN = (
     "1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA"
 )
 DOMAIN = "x.com"
-CREATE_TWEET_ENDPOINT = f"https://{DOMAIN}/i/api/graphql/SiM_cAu83R0wnrpmKQQSEw/CreateTweet"
+CREATE_TWEET_ENDPOINT = f"https://{DOMAIN}/i/api/graphql/nk8sb5Uu0l6zePyGJI_uYQ/CreateTweet"
 UPLOAD_MEDIA_ENDPOINT = f"https://upload.{DOMAIN}/i/media/upload.json"
 
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/131.0.0.0 Safari/537.36"
+    "Chrome/136.0.0.0 Safari/537.36"
 )
 
 FEATURES = {
-    "creator_subscriptions_tweet_preview_api_enabled": True,
+    "premium_content_api_read_enabled": False,
+    "communities_web_enable_tweet_community_results_fetch": True,
     "c9s_tweet_anatomy_moderator_badge_enabled": True,
-    "tweetypie_unmention_optimization_enabled": True,
+    "responsive_web_grok_analyze_button_fetch_trends_enabled": False,
+    "responsive_web_grok_analyze_post_followups_enabled": False,
+    "responsive_web_jetfuel_frame": True,
+    "responsive_web_grok_share_attachment_enabled": True,
+    "responsive_web_grok_annotations_enabled": True,
     "responsive_web_edit_tweet_api_enabled": True,
     "graphql_is_translatable_rweb_tweet_is_translatable_enabled": True,
     "view_counts_everywhere_api_enabled": True,
     "longform_notetweets_consumption_enabled": True,
     "responsive_web_twitter_article_tweet_consumption_enabled": True,
     "tweet_awards_web_tipping_enabled": False,
+    "creator_subscriptions_tweet_preview_api_enabled": True,
     "longform_notetweets_rich_text_read_enabled": True,
     "longform_notetweets_inline_media_enabled": True,
-    "rweb_video_timestamps_enabled": True,
-    "responsive_web_graphql_exclude_directive_enabled": True,
+    "profile_label_improvements_pcf_label_in_post_enabled": True,
+    "responsive_web_profile_redirect_enabled": False,
+    "rweb_tipjar_consumption_enabled": False,
     "verified_phone_label_enabled": False,
+    "articles_preview_enabled": True,
+    "responsive_web_grok_community_note_auto_translation_is_enabled": False,
+    "responsive_web_graphql_skip_user_profile_image_extensions_enabled": False,
     "freedom_of_speech_not_reach_fetch_enabled": True,
     "standardized_nudges_misinfo": True,
     "tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": True,
-    "responsive_web_media_download_video_enabled": False,
-    "responsive_web_graphql_skip_user_profile_image_extensions_enabled": False,
+    "responsive_web_grok_image_annotation_enabled": True,
+    "responsive_web_grok_imagine_annotation_enabled": True,
     "responsive_web_graphql_timeline_navigation_enabled": True,
     "responsive_web_enhance_cards_enabled": False,
 }
@@ -216,11 +227,11 @@ def classify_error(exc: Exception) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Core session class — uses requests.Session for proxy compatibility
+# Core session class — uses curl_cffi for Chrome TLS fingerprint
 # ---------------------------------------------------------------------------
 
 class TwitterPublisherSession:
-    """Wraps a requests.Session bound to one account + proxy."""
+    """Wraps a curl_cffi Session bound to one account + proxy."""
 
     ON_DEMAND_FILE_REGEX = re.compile(
         r"""['|"]{1}ondemand\.s['|"]{1}:\s*['|"]{1}([\w]*)['|"]{1}""",
@@ -237,8 +248,25 @@ class TwitterPublisherSession:
         self.proxy_url: str | None = None
         self.ct0: str | None = None
         self.auth_token: str | None = None
-        self._http: requests.Session | None = None
+        self._full_cookies: dict[str, str] = {}
+        self._http: cffi_requests.Session | None = None
         self._client_transaction: ClientTransaction | None = None
+
+    # ---- cookie parsing ---------------------------------------------------
+
+    @staticmethod
+    def _parse_cookie_string(cookie_str: str) -> dict[str, str]:
+        """Parse a browser cookie string like 'k1=v1; k2=v2' into a dict."""
+        cookies: dict[str, str] = {}
+        for pair in cookie_str.split(";"):
+            pair = pair.strip()
+            if not pair or "=" not in pair:
+                continue
+            key, _, value = pair.partition("=")
+            key = key.strip()
+            if key:
+                cookies[key] = value.strip()
+        return cookies
 
     # ---- lifecycle --------------------------------------------------------
 
@@ -255,9 +283,29 @@ class TwitterPublisherSession:
         if self.account.get("status") != "active":
             raise ValueError(f"账号状态异常 ({self.account.get('status')}), 无法发布")
 
-        self.auth_token = self.account.get("token")
+        # Parse cookies: prefer full cookie string, fall back to token-only
+        raw_cookies = (self.account.get("cookies") or "").strip()
+        raw_token = (self.account.get("token") or "").strip()
+
+        if raw_cookies:
+            self._full_cookies = self._parse_cookie_string(raw_cookies)
+            self.auth_token = self._full_cookies.get("auth_token", "")
+            # If cookies string has ct0, pre-populate it (will be refreshed in bootstrap)
+            if self._full_cookies.get("ct0"):
+                self.ct0 = self._full_cookies["ct0"]
+            logger.info("[init] 已解析完整 cookies (%d 个字段), auth_token=%s",
+                        len(self._full_cookies),
+                        "有" if self.auth_token else "无")
+        elif raw_token:
+            # Legacy: token field contains only auth_token
+            self.auth_token = raw_token
+            self._full_cookies = {"auth_token": raw_token}
+            logger.info("[init] 使用 token 字段作为 auth_token (旧模式)")
+        else:
+            raise ValueError("账号缺少 cookies 或 token 字段，无法发布")
+
         if not self.auth_token:
-            raise ValueError("账号缺少 auth_token (token 字段)")
+            raise ValueError("cookies 中缺少 auth_token，请检查 cookie 是否完整")
         logger.debug("[init] auth_token 长度=%d, 前8字符=%s...",
                      len(self.auth_token), self.auth_token[:8])
 
@@ -266,15 +314,30 @@ class TwitterPublisherSession:
                        if "@" in self.proxy_url else self.proxy_url)
         logger.info("[init] 代理已解析: %s", proxy_label)
 
-        # Build requests.Session with session-level proxy
-        # CRITICAL: must use session.proxies.update(), NOT per-request proxies=
-        self._http = requests.Session()
-        self._http.proxies.update({
+        # Build curl_cffi Session with Chrome TLS fingerprint
+        self._http = cffi_requests.Session(impersonate="chrome136")
+        self._http.headers.update({"User-Agent": DEFAULT_USER_AGENT})
+
+        # Pre-load full cookies into session BEFORE any requests
+        for cname, cvalue in self._full_cookies.items():
+            self._http.cookies.set(cname, cvalue, domain=".x.com")
+        logger.debug("[init] curl_cffi Session 已创建 (Chrome TLS), 预注入 %d 个 cookies",
+                     len(self._full_cookies))
+
+        # Test proxy connectivity, fall back to direct if proxy fails
+        self._http.proxies = {
             "http": self.proxy_url,
             "https": self.proxy_url,
-        })
-        self._http.headers.update({"User-Agent": DEFAULT_USER_AGENT})
-        logger.debug("[init] requests.Session 已创建 (session.proxies.update)")
+        }
+        try:
+            test_resp = self._http.get(
+                f"https://{DOMAIN}", timeout=10, allow_redirects=True
+            )
+            logger.info("[init] 代理连接成功 (status=%d)", test_resp.status_code)
+        except Exception as proxy_err:
+            logger.warning("[init] 代理连接失败: %s — 回退到直连模式", proxy_err)
+            self._http.proxies = {}
+            self.proxy_url = "(direct)"
 
         # Bootstrap ct0 + client transaction (anti-automation)
         await asyncio.to_thread(self._bootstrap_ct0_and_transaction)
@@ -296,20 +359,35 @@ class TwitterPublisherSession:
     # ---- ct0 bootstrap (synchronous, run via asyncio.to_thread) ----------
 
     def _bootstrap_ct0_and_transaction(self) -> None:
-        """Fetch x.com via proxy to get ct0 and initialize ClientTransaction."""
+        """Fetch x.com via proxy to get ct0 and initialize ClientTransaction.
+        Handles Twitter's x-migration redirects (matching twikit's handle_x_migration).
+        """
         ct_headers = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.9",
             "Cache-Control": "no-cache",
-            "Referer": f"https://{DOMAIN}",
+            "Pragma": "no-cache",
+            "Sec-Ch-Ua": '"Chromium";v="136", "Not_A Brand";v="24"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": '"Windows"',
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
             "User-Agent": DEFAULT_USER_AGENT,
         }
 
-        # Step 1: fetch x.com home page
+        migration_redirection_regex = re.compile(
+            r"""(http(?:s)?://(?:www\.)?(twitter|x){1}\.com(/x)?/migrate([/?])?tok=[a-zA-Z0-9%\-_]+)+""",
+            re.VERBOSE,
+        )
+
+        # Step 1: fetch x.com home page (session already has full cookies pre-loaded)
         logger.debug("[ct0] 正在通过代理请求 https://x.com ...")
         t0 = time.time()
         resp = self._http.get(
             f"https://{DOMAIN}",
-            cookies={"auth_token": self.auth_token},
             headers=ct_headers,
             timeout=API_TIMEOUT,
             allow_redirects=True,
@@ -323,6 +401,51 @@ class TwitterPublisherSession:
                 f"auth_token 可能已过期，请重新导入账号。"
             )
 
+        home_page = bs4.BeautifulSoup(resp.content, "lxml")
+
+        # Step 1b: handle x-migration redirect (matching twikit handle_x_migration)
+        migration_url_meta = home_page.select_one("meta[http-equiv='refresh']")
+        migration_match = (
+            re.search(migration_redirection_regex, str(migration_url_meta))
+            or re.search(migration_redirection_regex, str(resp.content))
+        )
+        if migration_match:
+            logger.debug("[ct0] 检测到 migration 重定向: %s", migration_match.group(0))
+            resp = self._http.get(
+                migration_match.group(0),
+                headers=ct_headers,
+                timeout=API_TIMEOUT,
+                allow_redirects=True,
+            )
+            home_page = bs4.BeautifulSoup(resp.content, "lxml")
+
+        migration_form = (
+            home_page.select_one("form[name='f']")
+            or home_page.select_one("form[action='https://x.com/x/migrate']")
+        )
+        if migration_form:
+            form_url = migration_form.attrs.get("action", "https://x.com/x/migrate") + "/?mx=2"
+            form_method = migration_form.attrs.get("method", "POST").upper()
+            form_data = {
+                inp.get("name"): inp.get("value")
+                for inp in migration_form.select("input")
+                if inp.get("name")
+            }
+            logger.debug("[ct0] 提交 migration 表单: %s %s", form_method, form_url)
+            if form_method == "POST":
+                resp = self._http.post(
+                    form_url, data=form_data,
+                    headers=ct_headers, timeout=API_TIMEOUT,
+                    allow_redirects=True,
+                )
+            else:
+                resp = self._http.get(
+                    form_url, params=form_data,
+                    headers=ct_headers, timeout=API_TIMEOUT,
+                    allow_redirects=True,
+                )
+            home_page = bs4.BeautifulSoup(resp.content, "lxml")
+
         ct0 = resp.cookies.get("ct0") or self._http.cookies.get("ct0")
         if not ct0:
             raise ValueError(
@@ -331,7 +454,6 @@ class TwitterPublisherSession:
         self.ct0 = ct0
 
         # Step 2: initialize ClientTransaction from home page HTML
-        home_page = bs4.BeautifulSoup(resp.content, "lxml")
         ct = ClientTransaction()
         ct.home_page_response = ct.validate_response(home_page)
 
@@ -451,10 +573,9 @@ class TwitterPublisherSession:
                      proxy.get("protocol"), proxy.get("status"))
 
         if proxy.get("status") not in ("active", "slow"):
-            raise ValueError(
-                f"账号 @{account_name} 绑定的代理 {binding['proxy_id']} "
-                f"状态为 {proxy.get('status')}（非 active/slow），"
-                f"为防止直连封号已拒绝发布。请更换代理。"
+            logger.warning(
+                "[proxy] 代理 %s 状态为 %s（非 active/slow），将尝试连接并可能回退到直连",
+                binding["proxy_id"], proxy.get("status"),
             )
 
         return self._build_proxy_url(proxy)
@@ -481,7 +602,7 @@ class TwitterPublisherSession:
             "content-type": "application/json",
             "Origin": f"https://{DOMAIN}",
             "Referer": f"https://{DOMAIN}/",
-            "Sec-Ch-Ua": '"Chromium";v="131", "Not_A Brand";v="24"',
+            "Sec-Ch-Ua": '"Chromium";v="136", "Not_A Brand";v="24"',
             "Sec-Ch-Ua-Mobile": "?0",
             "Sec-Ch-Ua-Platform": '"Windows"',
             "Sec-Fetch-Dest": "empty",
@@ -505,11 +626,16 @@ class TwitterPublisherSession:
         return headers
 
     def _api_cookies(self) -> dict[str, str]:
-        base = {"auth_token": self.auth_token, "ct0": self.ct0}
+        # Start with full cookies from account, then overlay session cookies
+        base = dict(self._full_cookies)
+        # Ensure auth_token and ct0 are always up-to-date
+        base["auth_token"] = self.auth_token
+        base["ct0"] = self.ct0
+        # Merge session cookies (e.g. refreshed __cf_bm from Cloudflare)
         if self._http:
-            for cookie in self._http.cookies:
-                if cookie.name not in base:
-                    base[cookie.name] = cookie.value
+            for k, v in self._http.cookies.items():
+                if k not in ("auth_token", "ct0"):
+                    base[k] = v
         return base
 
     # ---- media upload (synchronous, run via asyncio.to_thread) -----------
@@ -662,10 +788,10 @@ class TwitterPublisherSession:
         payload = {
             "variables": variables,
             "features": FEATURES,
-            "queryId": "SiM_cAu83R0wnrpmKQQSEw",
+            "queryId": "nk8sb5Uu0l6zePyGJI_uYQ",
         }
 
-        api_path = "/i/api/graphql/SiM_cAu83R0wnrpmKQQSEw/CreateTweet"
+        api_path = "/i/api/graphql/nk8sb5Uu0l6zePyGJI_uYQ/CreateTweet"
         cookies = self._api_cookies()
 
         # Single attempt (no retry for 226 — surface full diagnostics instead)
@@ -684,6 +810,11 @@ class TwitterPublisherSession:
         logger.info("[tweet] Headers: %s", json.dumps(safe_headers, indent=2))
         logger.info("[tweet] Cookies (摘要): %s", json.dumps(safe_cookies))
         logger.info("[tweet] Payload: %s", json.dumps(payload, ensure_ascii=False))
+
+        # Anti-detection: random delay before posting (simulate human typing/review)
+        delay = random.uniform(1.5, 4.0)
+        logger.debug("[tweet] 发布前随机延迟 %.1fs (反检测)", delay)
+        time.sleep(delay)
 
         t0 = time.time()
         resp = self._http.post(

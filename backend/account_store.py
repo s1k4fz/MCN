@@ -75,7 +75,8 @@ def canonical_field_name(raw_key: str) -> str:
     account_aliases = {"账号", "账户", "用户名", "user", "username", "account", "handle", "账号名"}
     password_aliases = {"密码", "pass", "pwd", "password"}
     twofa_aliases = {"2fa", "twofa", "totp", "otp", "googleauth", "验证器", "二步验证", "双重验证"}
-    token_aliases = {"token", "authtoken", "auth", "cookie", "cookies", "session", "会话"}
+    token_aliases = {"token", "authtoken", "auth", "session", "会话"}
+    cookies_aliases = {"cookie", "cookies", "完整cookie", "浏览器cookie", "fullcookie"}
     email_aliases = {"email", "mail", "邮箱"}
     email_password_aliases = {"mailpass", "mailpassword", "邮箱密码", "emailpassword", "emailpass"}
 
@@ -87,6 +88,8 @@ def canonical_field_name(raw_key: str) -> str:
         return "twofa"
     if normalized in {_normalize_key(item) for item in token_aliases}:
         return "token"
+    if normalized in {_normalize_key(item) for item in cookies_aliases}:
+        return "cookies"
     if normalized in {_normalize_key(item) for item in email_aliases}:
         return "email"
     if normalized in {_normalize_key(item) for item in email_password_aliases}:
@@ -133,6 +136,7 @@ def create_account_record(
     password: str | None = None,
     twofa: str | None = None,
     token: str | None = None,
+    cookies: str | None = None,
     email: str | None = None,
     email_password: str | None = None,
     status: str = "unverified",
@@ -149,6 +153,7 @@ def create_account_record(
     normalized_password = _clean_text(password)
     normalized_twofa = _clean_text(twofa)
     normalized_token = _clean_text(token)
+    normalized_cookies = _clean_text(cookies)
     normalized_email = _clean_text(email)
     normalized_email_password = _clean_text(email_password)
     normalized_pool = (pool or "").strip().lower() or None
@@ -170,6 +175,7 @@ def create_account_record(
         "password": normalized_password,
         "twofa": normalized_twofa,
         "token": normalized_token,
+        "cookies": normalized_cookies,
         "email": normalized_email,
         "email_password": normalized_email_password,
         "status": normalized_status,
@@ -221,6 +227,8 @@ def update_account_record(account_id: str, **fields: Any) -> dict[str, Any] | No
         target["twofa"] = _clean_text(fields.get("twofa"))
     if "token" in fields:
         target["token"] = _clean_text(fields.get("token"))
+    if "cookies" in fields:
+        target["cookies"] = _clean_text(fields.get("cookies"))
     if "email" in fields:
         target["email"] = _clean_text(fields.get("email"))
     if "email_password" in fields:

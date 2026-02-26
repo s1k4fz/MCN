@@ -1,74 +1,11 @@
 [
   {
-    "id": "6e9189e81ac640758742f578d9aa476c",
+    "id": "ea22b30d3060440093351f9796802848",
     "platform": "twitter",
-    "account_uid": "97b02bf701ba408494611eb49bbd5d90",
-    "account_name": "114514",
-    "proxy_id": "ac6c5b87e635429488e8ac047dae5ec1",
-    "created_at": "2026-02-19T19:32:14",
-    "updated_at": "2026-02-19T19:32:14"
-  },
-  {
-    "id": "a35f5496b2da47ba84b39af9f1dc3ee7",
-    "platform": "twitter",
-    "account_uid": "60068304a6b447e388ce07a379fedd7c",
-    "account_name": "DuarteLora65746",
-    "proxy_id": "4ca923655da64e2386e03f1db51e3fd1",
-    "created_at": "2026-02-23T04:14:02",
-    "updated_at": "2026-02-23T04:14:02"
-  },
-  {
-    "id": "e74f2625cba94441a5598a4ccff7e50f",
-    "platform": "twitter",
-    "account_uid": "491e770a76054d3d90b06c677f7ccfe8",
-    "account_name": "AGlaysbroo30559",
-    "proxy_id": "13d9430463624a7aa7a7d79c6c98ad5d",
-    "created_at": "2026-02-23T05:03:48",
-    "updated_at": "2026-02-23T05:03:48"
-  },
-  {
-    "id": "2dd54b26b0b8419890d593c5d12f0af3",
-    "platform": "twitter",
-    "account_uid": "e3fb6ddb68c34318ab456cd43eae5207",
-    "account_name": "JanetteB44121",
+    "account_uid": "3fade6ee03aa4c85a303f36103109083",
+    "account_name": "knileom",
     "proxy_id": "1531cf26e9d64c738c455037e134e9bf",
-    "created_at": "2026-02-23T05:03:48",
-    "updated_at": "2026-02-23T05:03:48"
-  },
-  {
-    "id": "0b34d7a0aebe4188a6a42b3b2b15669e",
-    "platform": "twitter",
-    "account_uid": "7ec1d20174104158a84146facbabbc5d",
-    "account_name": "MarjorieFe85669",
-    "proxy_id": "18bdb4716d224fc0a5fce7a3ba33f084",
-    "created_at": "2026-02-23T05:03:48",
-    "updated_at": "2026-02-23T05:03:48"
-  },
-  {
-    "id": "13e99c28beec482eb460331c6930785e",
-    "platform": "twitter",
-    "account_uid": "1a831f5d315a462380fd4b983a536fd7",
-    "account_name": "AGlaysbroo30559",
-    "proxy_id": "1c9e5b9709934a38938a45236ee04931",
-    "created_at": "2026-02-23T10:59:03",
-    "updated_at": "2026-02-23T10:59:03"
-  },
-  {
-    "id": "92fef458d03f4f24abf14c197f002d11",
-    "platform": "twitter",
-    "account_uid": "e088e9681c5a477681fdc94345a108b7",
-    "account_name": "JanetteB44121",
-    "proxy_id": "9b3a4eac3d53476ab9f3aab69eeb9b42",
-    "created_at": "2026-02-23T10:59:03",
-    "updated_at": "2026-02-23T10:59:03"
-  },
-  {
-    "id": "5c582dc52e6744b88aa9bd436ed79f59",
-    "platform": "twitter",
-    "account_uid": "4843bf1c656c458daf0b83a3db06ece5",
-    "account_name": "DuarteLora65746",
-    "proxy_id": "c3038cca08fc4400afa88c1662eac855",
-    "created_at": "2026-02-23T10:59:03",
-    "updated_at": "2026-02-23T10:59:03"
+    "created_at": "2026-02-26T19:25:00",
+    "updated_at": "2026-02-26T19:25:00"
   }
 ]

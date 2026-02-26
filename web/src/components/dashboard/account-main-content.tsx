@@ -52,6 +52,7 @@ type AccountItem = {
   password_masked?: string | null
   twofa_masked?: string | null
   token_masked?: string | null
+  cookies_masked?: string | null
   email_password_masked?: string | null
   extra_fields?: Record<string, string>
   created_at?: string
@@ -63,6 +64,7 @@ type SingleAccountForm = {
   password: string
   twofa: string
   token: string
+  cookies: string
   email: string
   emailPassword: string
 }
@@ -140,6 +142,7 @@ function createDefaultSingleForm(): SingleAccountForm {
     password: "",
     twofa: "",
     token: "",
+    cookies: "",
     email: "",
     emailPassword: "",
   }
@@ -489,6 +492,7 @@ export function AccountMainContent({ pool }: AccountMainContentProps = {}) {
           password: singleForm.password.trim() || null,
           twofa: singleForm.twofa.trim() || null,
           token: singleForm.token.trim() || null,
+          cookies: singleForm.cookies.trim() || null,
           email: singleForm.email.trim() || null,
           email_password: singleForm.emailPassword.trim() || null,
           status: "active",
@@ -973,6 +977,10 @@ export function AccountMainContent({ pool }: AccountMainContentProps = {}) {
                       <span className="text-zinc-200">{selectedAccount.token_masked || "-"}</span>
                     </div>
                     <div className="flex items-center justify-between gap-3">
+                      <span className="text-zinc-500">Cookies</span>
+                      <span className="text-zinc-200">{selectedAccount.cookies_masked || "-"}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
                       <span className="text-zinc-500">邮箱</span>
                       <span className="text-zinc-200">{selectedAccount.email || "-"}</span>
                     </div>
@@ -1204,8 +1212,17 @@ export function AccountMainContent({ pool }: AccountMainContentProps = {}) {
               onChange={(event) =>
                 setSingleForm((prev) => ({ ...prev, token: event.target.value }))
               }
-              placeholder="Token / Cookie"
+              placeholder="Token (auth_token)"
               className="h-9 rounded-full border border-white/[0.12] bg-white/[0.03] px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
+            />
+            <textarea
+              value={singleForm.cookies}
+              onChange={(event) =>
+                setSingleForm((prev) => ({ ...prev, cookies: event.target.value }))
+              }
+              placeholder="完整 Cookies（从浏览器复制，格式: key1=val1; key2=val2; ...）"
+              rows={3}
+              className="rounded-xl border border-white/[0.12] bg-white/[0.03] px-4 py-2 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06] resize-y"
             />
             <input
               value={singleForm.email}

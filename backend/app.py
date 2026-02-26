@@ -185,6 +185,7 @@ class AccountCreateRequest(BaseModel):
     password: str | None = None
     twofa: str | None = None
     token: str | None = None
+    cookies: str | None = None
     email: str | None = None
     email_password: str | None = None
     status: str = "unverified"
@@ -878,6 +879,7 @@ def serialize_account_record(record: dict[str, Any]) -> dict[str, Any]:
         "password_masked": mask_secret(record.get("password")),
         "twofa_masked": mask_secret(record.get("twofa")),
         "token_masked": mask_secret(record.get("token")),
+        "cookies_masked": mask_secret(record.get("cookies")),
         "email": record.get("email"),
         "email_password_masked": mask_secret(record.get("email_password")),
         "status": status,
@@ -1114,6 +1116,7 @@ def create_account(payload: AccountCreateRequest) -> dict[str, Any]:
             password=payload.password,
             twofa=payload.twofa,
             token=payload.token,
+            cookies=payload.cookies,
             email=payload.email,
             email_password=payload.email_password,
             status=payload.status,
@@ -1190,6 +1193,7 @@ def create_account_batch(payload: AccountBatchCreateRequest) -> dict[str, Any]:
                 password=canonical_fields.get("password"),
                 twofa=canonical_fields.get("twofa"),
                 token=canonical_fields.get("token"),
+                cookies=canonical_fields.get("cookies"),
                 email=canonical_fields.get("email"),
                 email_password=canonical_fields.get("email_password"),
                 status=payload.status,
@@ -1233,7 +1237,7 @@ def delete_account(account_id: str) -> dict[str, Any]:
     try:
         remove_account_binding(
             platform=str(record.get("platform") or "twitter"),
-            account_uid=str(record.get("account") or ""),
+            account_uid=account_id,
         )
     except Exception:
         pass
@@ -1492,6 +1496,9 @@ def api_upsert_binding(req: BindingUpsertRequest):
     except ValueError as e:
         print(f"{BIND_LOG}   ❌ 绑定失败: {e}", flush=True)
         return {"success": False, "message": str(e)}
+    except Exception as e:
+        print(f"{BIND_LOG}   ❌ 绑定失败 (未知错误): {e}", flush=True)
+        return {"success": False, "message": f"绑定失败: {e}"}
 
     return {
         "success": True,

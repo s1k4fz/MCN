@@ -8,88 +8,88 @@
     "password": "59751a2451fa4c0a",
     "region": null,
     "type": "publish",
-    "status": "slow",
-    "last_checked_at": "2026-02-23T04:34:33",
-    "last_latency_ms": 2450,
+    "status": "active",
+    "last_checked_at": "2026-02-26T17:56:37",
+    "last_latency_ms": 2210,
     "last_error": null,
     "last_check_result": {
       "success": true,
       "status": "slow",
-      "message": "代理深度检测完成 (评分=1.4, 解锁=8/11, 延迟=2450ms)",
-      "task_id": "8e35d24c-1c15-4673-8072-3bb222c10755",
+      "message": "代理深度检测完成 (评分=1.4, 解锁=8/11, 延迟=2210ms)",
+      "task_id": "17b9cf3f-87e1-4699-8cc5-e16c99fc8825",
       "submit_http_status": 200,
       "submit_response_preview": "{\"success\":true,\"message\":\"success\",\"data\":{\"bad\":[],\"dsnCount\":1,\"inspectionsCount\":24,\"services\":[\"facebook\",\"google\",\"yandex\",\"tiktok\",\"youtube\",\"vk\",\"twitch\",\"spotify\",\"twitter\",\"instagram\",\"pinterest\"]},\"errors\":[]}",
       "dsn": "userID-2608-orderid-201875-region-us:59751a2451fa4c0a@usdata.lumidaili.com:10000",
       "protocol_layer": "http",
-      "real_ip": "75.191.100.27",
-      "latency_seconds": 2.45,
-      "latency_ms": 2450,
+      "real_ip": "71.6.36.133",
+      "latency_seconds": 2.21,
+      "latency_ms": 2210,
       "score": 1.4,
-      "proxy_type": "Residential",
+      "proxy_type": "Corporate",
       "country": "United States",
-      "region": "North Carolina",
-      "city": "Reidsville",
+      "region": "California",
+      "city": "Martinez",
       "services": [
         {
           "name": "tiktok",
           "ok": false,
-          "latency_seconds": 0.0
-        },
-        {
-          "name": "facebook",
-          "ok": false,
-          "latency_seconds": 3.1
-        },
-        {
-          "name": "pinterest",
-          "ok": true,
-          "latency_seconds": 2.09
-        },
-        {
-          "name": "spotify",
-          "ok": true,
-          "latency_seconds": 1.7
-        },
-        {
-          "name": "instagram",
-          "ok": true,
-          "latency_seconds": 1.86
-        },
-        {
-          "name": "youtube",
-          "ok": true,
-          "latency_seconds": 1.34
+          "latency_seconds": 2.59
         },
         {
           "name": "twitch",
           "ok": true,
-          "latency_seconds": 2.72
+          "latency_seconds": 2.8
+        },
+        {
+          "name": "instagram",
+          "ok": true,
+          "latency_seconds": 1.17
         },
         {
           "name": "google",
           "ok": true,
-          "latency_seconds": 3.03
+          "latency_seconds": 4.71
         },
         {
           "name": "twitter",
           "ok": false,
-          "latency_seconds": 1.39
+          "latency_seconds": 1.77
         },
         {
-          "name": "vk",
+          "name": "pinterest",
           "ok": true,
-          "latency_seconds": 2.38
+          "latency_seconds": 1.55
+        },
+        {
+          "name": "facebook",
+          "ok": false,
+          "latency_seconds": 1.61
+        },
+        {
+          "name": "spotify",
+          "ok": true,
+          "latency_seconds": 1.1
         },
         {
           "name": "yandex",
           "ok": true,
-          "latency_seconds": 4.78
+          "latency_seconds": 3.36
+        },
+        {
+          "name": "youtube",
+          "ok": true,
+          "latency_seconds": 2.62
+        },
+        {
+          "name": "vk",
+          "ok": true,
+          "latency_seconds": 2.16
         }
       ],
       "error": null
     },
     "created_at": "2026-02-16T05:49:44",
-    "updated_at": "2026-02-23T04:34:33"
+    "updated_at": "2026-02-26T17:56:37"
   },
   {
     "id": "ac6c5b87e635429488e8ac047dae5ec1",
@@ -100,88 +100,17 @@
     "password": "330d976b7d0c23e4",
     "region": null,
     "type": "publish",
-    "status": "slow",
-    "last_checked_at": "2026-02-23T04:34:40",
-    "last_latency_ms": 2420,
-    "last_error": null,
+    "status": "active",
+    "last_checked_at": "2026-02-26T17:56:10",
+    "last_latency_ms": null,
+    "last_error": "Cannot connect to host ws.checkerproxy.net:443 ssl:default [None]",
     "last_check_result": {
-      "success": true,
-      "status": "slow",
-      "message": "代理深度检测完成 (评分=1.6, 解锁=9/11, 延迟=2420ms)",
-      "task_id": "44ee954e-12ea-44be-b519-e620a4a211a0",
-      "submit_http_status": 200,
-      "submit_response_preview": "{\"success\":true,\"message\":\"success\",\"data\":{\"bad\":[],\"dsnCount\":1,\"inspectionsCount\":24,\"services\":[\"facebook\",\"google\",\"yandex\",\"tiktok\",\"youtube\",\"vk\",\"twitch\",\"spotify\",\"twitter\",\"instagram\",\"pinterest\"]},\"errors\":[]}",
-      "dsn": "userID-2608-orderid-18098-region-us:330d976b7d0c23e4@asdata.lumidaili.com:10000",
-      "protocol_layer": "http",
-      "real_ip": "74.112.119.80",
-      "latency_seconds": 2.42,
-      "latency_ms": 2420,
-      "score": 1.6,
-      "proxy_type": "Residential",
-      "country": "United States",
-      "region": "Indiana",
-      "city": "Fortville",
-      "services": [
-        {
-          "name": "vk",
-          "ok": false,
-          "latency_seconds": 0.0
-        },
-        {
-          "name": "facebook",
-          "ok": true,
-          "latency_seconds": 4.32
-        },
-        {
-          "name": "instagram",
-          "ok": true,
-          "latency_seconds": 2.42
-        },
-        {
-          "name": "pinterest",
-          "ok": true,
-          "latency_seconds": 2.24
-        },
-        {
-          "name": "tiktok",
-          "ok": true,
-          "latency_seconds": 4.42
-        },
-        {
-          "name": "youtube",
-          "ok": true,
-          "latency_seconds": 4.2
-        },
-        {
-          "name": "spotify",
-          "ok": true,
-          "latency_seconds": 2.15
-        },
-        {
-          "name": "twitch",
-          "ok": true,
-          "latency_seconds": 4.04
-        },
-        {
-          "name": "yandex",
-          "ok": true,
-          "latency_seconds": 7.94
-        },
-        {
-          "name": "twitter",
-          "ok": false,
-          "latency_seconds": 2.15
-        },
-        {
-          "name": "google",
-          "ok": true,
-          "latency_seconds": 4.56
-        }
-      ],
-      "error": null
+      "success": false,
+      "status": "dead",
+      "message": "Cannot connect to host ws.checkerproxy.net:443 ssl:default [None]"
     },
     "created_at": "2026-02-16T05:49:44",
-    "updated_at": "2026-02-23T04:34:40"
+    "updated_at": "2026-02-26T17:56:10"
   },
   {
     "id": "1531cf26e9d64c738c455037e134e9bf",
@@ -192,73 +121,28 @@
     "password": "cb3cd1dbc6bef765",
     "region": null,
     "type": "publish",
-    "status": "slow",
-    "last_checked_at": "2026-02-23T04:34:38",
-    "last_latency_ms": 3510,
+    "status": "active",
+    "last_checked_at": "2026-02-26T17:56:42",
+    "last_latency_ms": 3010,
     "last_error": null,
     "last_check_result": {
       "success": true,
       "status": "slow",
-      "message": "代理深度检测完成 (评分=1.2, 解锁=7/11, 延迟=3510ms)",
-      "task_id": "bbdeabe3-5b99-4672-93d8-479300314479",
+      "message": "代理深度检测完成 (评分=1, 解锁=6/11, 延迟=3010ms)",
+      "task_id": "13ba3123-fec9-4cea-a53d-122f26389773",
       "submit_http_status": 200,
       "submit_response_preview": "{\"success\":true,\"message\":\"success\",\"data\":{\"bad\":[],\"dsnCount\":1,\"inspectionsCount\":24,\"services\":[\"facebook\",\"google\",\"yandex\",\"tiktok\",\"youtube\",\"vk\",\"twitch\",\"spotify\",\"twitter\",\"instagram\",\"pinterest\"]},\"errors\":[]}",
       "dsn": "userID-2608-orderid-202796-region-us:cb3cd1dbc6bef765@asdata.lumidaili.com:10000",
       "protocol_layer": "http",
-      "real_ip": "108.26.117.78",
-      "latency_seconds": 3.51,
-      "latency_ms": 3510,
-      "score": 1.2,
+      "real_ip": "99.113.248.232",
+      "latency_seconds": 3.01,
+      "latency_ms": 3010,
+      "score": 1,
       "proxy_type": "Residential",
       "country": "United States",
-      "region": "Virginia",
-      "city": "Newport News",
+      "region": "Mississippi",
+      "city": "Gulfport",
       "services": [
-        {
-          "name": "twitter",
-          "ok": false,
-          "latency_seconds": 2.8
-        },
-        {
-          "name": "twitch",
-          "ok": true,
-          "latency_seconds": 5.45
-        },
-        {
-          "name": "facebook",
-          "ok": false,
-          "latency_seconds": 5.59
-        },
-        {
-          "name": "instagram",
-          "ok": true,
-          "latency_seconds": 3.04
-        },
-        {
-          "name": "pinterest",
-          "ok": true,
-          "latency_seconds": 3.97
-        },
-        {
-          "name": "google",
-          "ok": true,
-          "latency_seconds": 7.01
-        },
-        {
-          "name": "youtube",
-          "ok": true,
-          "latency_seconds": 2.84
-        },
-        {
-          "name": "yandex",
-          "ok": true,
-          "latency_seconds": 6.91
-        },
-        {
-          "name": "vk",
-          "ok": false,
-          "latency_seconds": 0.0
-        },
         {
           "name": "tiktok",
           "ok": false,
@@ -267,13 +151,58 @@
         {
           "name": "spotify",
           "ok": true,
-          "latency_seconds": 3.1
+          "latency_seconds": 3.38
+        },
+        {
+          "name": "youtube",
+          "ok": false,
+          "latency_seconds": 0.0
+        },
+        {
+          "name": "instagram",
+          "ok": true,
+          "latency_seconds": 2.16
+        },
+        {
+          "name": "yandex",
+          "ok": false,
+          "latency_seconds": 0.0
+        },
+        {
+          "name": "twitch",
+          "ok": true,
+          "latency_seconds": 4.34
+        },
+        {
+          "name": "vk",
+          "ok": false,
+          "latency_seconds": 0.0
+        },
+        {
+          "name": "facebook",
+          "ok": true,
+          "latency_seconds": 11.35
+        },
+        {
+          "name": "google",
+          "ok": true,
+          "latency_seconds": 4.66
+        },
+        {
+          "name": "pinterest",
+          "ok": true,
+          "latency_seconds": 2.38
+        },
+        {
+          "name": "twitter",
+          "ok": false,
+          "latency_seconds": 0.0
         }
       ],
       "error": null
     },
     "created_at": "2026-02-16T05:49:44",
-    "updated_at": "2026-02-23T04:34:38"
+    "updated_at": "2026-02-26T19:38:06"
   },
   {
     "id": "18bdb4716d224fc0a5fce7a3ba33f084",
@@ -284,88 +213,88 @@
     "password": "cb3cd1dbc6bef765",
     "region": null,
     "type": "publish",
-    "status": "slow",
-    "last_checked_at": "2026-02-23T04:34:42",
-    "last_latency_ms": 3470,
+    "status": "active",
+    "last_checked_at": "2026-02-26T17:56:42",
+    "last_latency_ms": 4220,
     "last_error": null,
     "last_check_result": {
       "success": true,
       "status": "slow",
-      "message": "代理深度检测完成 (评分=1.4, 解锁=8/11, 延迟=3470ms)",
-      "task_id": "aada53d7-f73f-457c-8bd4-229332a87f78",
+      "message": "代理深度检测完成 (评分=0.8, 解锁=5/11, 延迟=4220ms)",
+      "task_id": "26e9abdf-5c7a-4e68-b7cf-817f30b4c3d0",
       "submit_http_status": 200,
       "submit_response_preview": "{\"success\":true,\"message\":\"success\",\"data\":{\"bad\":[],\"dsnCount\":1,\"inspectionsCount\":24,\"services\":[\"facebook\",\"google\",\"yandex\",\"tiktok\",\"youtube\",\"vk\",\"twitch\",\"spotify\",\"twitter\",\"instagram\",\"pinterest\"]},\"errors\":[]}",
       "dsn": "userID-2608-orderid-202796-region-any:cb3cd1dbc6bef765@asdata.lumidaili.com:10000",
       "protocol_layer": "http",
-      "real_ip": "153.66.181.232",
-      "latency_seconds": 3.47,
-      "latency_ms": 3470,
-      "score": 1.4,
+      "real_ip": "75.184.75.159",
+      "latency_seconds": 4.22,
+      "latency_ms": 4220,
+      "score": 0.8,
       "proxy_type": "Corporate",
       "country": "United States",
-      "region": null,
-      "city": null,
+      "region": "Missouri",
+      "city": "Kansas City",
       "services": [
         {
-          "name": "twitter",
-          "ok": false,
-          "latency_seconds": 3.48
-        },
-        {
-          "name": "instagram",
-          "ok": true,
-          "latency_seconds": 2.78
-        },
-        {
-          "name": "yandex",
-          "ok": true,
-          "latency_seconds": 7.98
-        },
-        {
-          "name": "spotify",
-          "ok": false,
-          "latency_seconds": 2.86
-        },
-        {
-          "name": "twitch",
-          "ok": true,
-          "latency_seconds": 4.93
-        },
-        {
-          "name": "tiktok",
-          "ok": true,
-          "latency_seconds": 2.78
-        },
-        {
-          "name": "facebook",
+          "name": "vk",
           "ok": false,
           "latency_seconds": 0.0
         },
         {
-          "name": "vk",
-          "ok": true,
-          "latency_seconds": 11.46
+          "name": "yandex",
+          "ok": false,
+          "latency_seconds": 0.0
         },
         {
-          "name": "pinterest",
+          "name": "twitch",
           "ok": true,
-          "latency_seconds": 3.33
+          "latency_seconds": 6.41
+        },
+        {
+          "name": "spotify",
+          "ok": false,
+          "latency_seconds": 0.0
+        },
+        {
+          "name": "youtube",
+          "ok": false,
+          "latency_seconds": 0.0
         },
         {
           "name": "google",
           "ok": true,
-          "latency_seconds": 5.74
+          "latency_seconds": 7.39
         },
         {
-          "name": "youtube",
+          "name": "pinterest",
           "ok": true,
-          "latency_seconds": 5.01
+          "latency_seconds": 3.36
+        },
+        {
+          "name": "twitter",
+          "ok": false,
+          "latency_seconds": 3.08
+        },
+        {
+          "name": "instagram",
+          "ok": true,
+          "latency_seconds": 2.98
+        },
+        {
+          "name": "facebook",
+          "ok": true,
+          "latency_seconds": 6.21
+        },
+        {
+          "name": "tiktok",
+          "ok": false,
+          "latency_seconds": 0.0
         }
       ],
       "error": null
     },
     "created_at": "2026-02-16T05:49:44",
-    "updated_at": "2026-02-23T04:34:42"
+    "updated_at": "2026-02-26T17:56:42"
   },
   {
     "id": "4ca923655da64e2386e03f1db51e3fd1",
@@ -376,88 +305,88 @@
     "password": "330d976b7d0c23e4",
     "region": null,
     "type": "publish",
-    "status": "slow",
-    "last_checked_at": "2026-02-23T04:34:34",
-    "last_latency_ms": 1910,
+    "status": "active",
+    "last_checked_at": "2026-02-26T17:56:42",
+    "last_latency_ms": 2610,
     "last_error": null,
     "last_check_result": {
       "success": true,
       "status": "slow",
-      "message": "代理深度检测完成 (评分=1.4, 解锁=8/11, 延迟=1910ms)",
-      "task_id": "96244e4a-63a1-431f-99b1-3eefb23eae7b",
+      "message": "代理深度检测完成 (评分=1.6, 解锁=9/11, 延迟=2610ms)",
+      "task_id": "df62a832-0bf5-482a-861c-dea3d775aabf",
       "submit_http_status": 200,
       "submit_response_preview": "{\"success\":true,\"message\":\"success\",\"data\":{\"bad\":[],\"dsnCount\":1,\"inspectionsCount\":24,\"services\":[\"facebook\",\"google\",\"yandex\",\"tiktok\",\"youtube\",\"vk\",\"twitch\",\"spotify\",\"twitter\",\"instagram\",\"pinterest\"]},\"errors\":[]}",
       "dsn": "userID-2608-orderid-18098-region-us:330d976b7d0c23e4@usdata.lumidaili.com:10000",
       "protocol_layer": "http",
-      "real_ip": "72.241.240.114",
-      "latency_seconds": 1.91,
-      "latency_ms": 1910,
-      "score": 1.4,
-      "proxy_type": "Corporate",
+      "real_ip": "75.36.177.205",
+      "latency_seconds": 2.61,
+      "latency_ms": 2610,
+      "score": 1.6,
+      "proxy_type": "Residential",
       "country": "United States",
-      "region": "Ohio",
-      "city": "Toledo",
+      "region": "Missouri",
+      "city": "St Louis",
       "services": [
         {
-          "name": "facebook",
-          "ok": false,
-          "latency_seconds": 1.14
-        },
-        {
-          "name": "twitter",
-          "ok": false,
-          "latency_seconds": 1.32
+          "name": "tiktok",
+          "ok": true,
+          "latency_seconds": 2.01
         },
         {
           "name": "pinterest",
           "ok": true,
-          "latency_seconds": 2.09
-        },
-        {
-          "name": "tiktok",
-          "ok": true,
-          "latency_seconds": 3.03
-        },
-        {
-          "name": "twitch",
-          "ok": true,
-          "latency_seconds": 3.05
+          "latency_seconds": 2.42
         },
         {
           "name": "spotify",
           "ok": true,
-          "latency_seconds": 1.35
+          "latency_seconds": 1.8
         },
         {
-          "name": "vk",
+          "name": "yandex",
           "ok": false,
           "latency_seconds": 0.0
         },
         {
-          "name": "instagram",
-          "ok": true,
-          "latency_seconds": 1.44
-        },
-        {
-          "name": "yandex",
-          "ok": true,
-          "latency_seconds": 4.24
-        },
-        {
           "name": "youtube",
           "ok": true,
-          "latency_seconds": 3.21
+          "latency_seconds": 3.65
+        },
+        {
+          "name": "instagram",
+          "ok": true,
+          "latency_seconds": 1.94
+        },
+        {
+          "name": "twitter",
+          "ok": false,
+          "latency_seconds": 2.34
+        },
+        {
+          "name": "facebook",
+          "ok": true,
+          "latency_seconds": 4.15
         },
         {
           "name": "google",
           "ok": true,
-          "latency_seconds": 3.14
+          "latency_seconds": 4.16
+        },
+        {
+          "name": "twitch",
+          "ok": true,
+          "latency_seconds": 4.16
+        },
+        {
+          "name": "vk",
+          "ok": true,
+          "latency_seconds": 3.46
         }
       ],
       "error": null
     },
     "created_at": "2026-02-16T05:49:44",
-    "updated_at": "2026-02-23T04:34:34"
+    "updated_at": "2026-02-26T17:56:42"
   },
   {
     "id": "1c9e5b9709934a38938a45236ee04931",
@@ -468,7 +397,7 @@
     "password": "59751a2451fa4c0a",
     "region": null,
     "type": "monitor",
-    "status": "slow",
+    "status": "active",
     "last_checked_at": "2026-02-19T02:35:39",
     "last_latency_ms": 2300,
     "last_error": null,
@@ -560,7 +489,7 @@
     "password": "330d976b7d0c23e4",
     "region": null,
     "type": "monitor",
-    "status": "dead",
+    "status": "active",
     "last_checked_at": "2026-02-19T02:35:17",
     "last_latency_ms": null,
     "last_error": "代理检测失败: Unauthorized",
@@ -596,7 +525,7 @@
     "password": "cb3cd1dbc6bef765",
     "region": null,
     "type": "monitor",
-    "status": "slow",
+    "status": "active",
     "last_checked_at": "2026-02-19T02:35:39",
     "last_latency_ms": 2620,
     "last_error": null,
@@ -688,7 +617,7 @@
     "password": "cb3cd1dbc6bef765",
     "region": null,
     "type": "monitor",
-    "status": "slow",
+    "status": "active",
     "last_checked_at": "2026-02-19T02:35:45",
     "last_latency_ms": 3070,
     "last_error": null,
@@ -780,7 +709,7 @@
     "password": "330d976b7d0c23e4",
     "region": null,
     "type": "monitor",
-    "status": "dead",
+    "status": "active",
     "last_checked_at": "2026-02-19T02:35:16",
     "last_latency_ms": null,
     "last_error": "代理检测失败: Unauthorized",

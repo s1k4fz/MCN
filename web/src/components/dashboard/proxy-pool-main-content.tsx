@@ -1072,7 +1072,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
           <DialogHeader>
             <DialogTitle>批量添加代理</DialogTitle>
             <DialogDescription>
-              每行一条，支持 <code>host:port:user:pass</code> 或标准 URL 格式。
+              每行一条，支持 <code>host:port</code>、<code>host:port:user:pass</code> 或标准 URL 格式。
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 space-y-4">
@@ -1090,7 +1090,7 @@ export function ProxyPoolMainContent({ poolType }: { poolType: ProxyPoolType }) 
               value={batchInput}
               onChange={(event) => setBatchInput(event.target.value)}
               placeholder={
-                "asdata.lumidaili.com:10000:userID-xxx:pass\nhttp://user:pass@host:port"
+                "62.112.11.191:12315\nasdata.lumidaili.com:10000:userID-xxx:pass\nhttp://user:pass@host:port"
               }
               className="min-h-[140px] w-full rounded-lg border border-white/[0.12] bg-white/[0.03] px-3 py-2 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
             />

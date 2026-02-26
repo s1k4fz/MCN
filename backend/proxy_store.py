@@ -146,19 +146,31 @@ def parse_proxy_input(raw: str) -> dict[str, Any]:
         }
 
     parts = value.split(":")
-    if len(parts) != 4:
-        raise ValueError("非 URL 代理格式必须是 host:port:user:pass")
-    host, port, username, password = parts
-    if not host or not port or not username or not password:
-        raise ValueError("代理字段不能为空")
-
-    return {
-        "ip": host.strip(),
-        "port": _normalize_port(port),
-        "protocol": "http",
-        "username": username.strip(),
-        "password": password.strip(),
-    }
+    if len(parts) == 2:
+        # host:port（无认证）
+        host, port = parts
+        if not host or not port:
+            raise ValueError("代理字段不能为空")
+        return {
+            "ip": host.strip(),
+            "port": _normalize_port(port),
+            "protocol": "http",
+            "username": None,
+            "password": None,
+        }
+    elif len(parts) == 4:
+        host, port, username, password = parts
+        if not host or not port or not username or not password:
+            raise ValueError("代理字段不能为空")
+        return {
+            "ip": host.strip(),
+            "port": _normalize_port(port),
+            "protocol": "http",
+            "username": username.strip(),
+            "password": password.strip(),
+        }
+    else:
+        raise ValueError("非 URL 代理格式必须是 host:port 或 host:port:user:pass")
 
 
 def list_proxy_records(

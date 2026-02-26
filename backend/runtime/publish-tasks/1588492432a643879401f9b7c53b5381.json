@@ -1,0 +1,51 @@
+{
+  "id": "1588492432a643879401f9b7c53b5381",
+  "kind": "publish-text",
+  "task_type": "publish",
+  "publish_mode": "single-tweet",
+  "collect_mode": "not-applicable",
+  "title": "发布推文 — 文本",
+  "description": "执行 Twitter 推文发布。",
+  "status": "failed",
+  "progress": {
+    "current": 2,
+    "total": 2,
+    "percent": 100
+  },
+  "created_at": "2026-02-26T19:38:00",
+  "updated_at": "2026-02-26T19:38:06",
+  "started_at": "2026-02-26T19:38:00",
+  "ended_at": "2026-02-26T19:38:06",
+  "payload": {
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "content": {
+      "text": "哈哈哈",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "strategy": {
+      "type": "immediate",
+      "scheduled_time": null
+    }
+  },
+  "results": [],
+  "result_summary": {
+    "total_count": 1,
+    "success_count": 0,
+    "failure_count": 1,
+    "tweet_id": null,
+    "tweet_url": null
+  },
+  "error": "代理服务器连接失败 (Failed to perform, curl: (56) Proxy CONNECT aborted. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.). 请检查代理是否过期或凭证是否有效。",
+  "logs": [
+    "[19:38:00] 任务已创建",
+    "[19:38:00] 已提交立即执行",
+    "[19:38:00] 开始发布推文 → 账号: @knileom",
+    "[19:38:00] 推文内容: 哈哈哈...",
+    "[19:38:00] 正在初始化发布会话 (获取ct0, 验证auth_token)...",
+    "[19:38:06] 发布失败 (耗时: 6.8s, 错误码: proxy_error, 可重试: False)",
+    "[19:38:06] 错误详情: 代理服务器连接失败 (Failed to perform, curl: (56) Proxy CONNECT aborted. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.). 请检查代理是否过期或凭证是否有效。",
+    "[19:38:06] 原始错误: Failed to perform, curl: (56) Proxy CONNECT aborted. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.",
+    "[19:38:06] 堆栈: Traceback (most recent call last):\n  File \"/Users/sakiyuka/MiniConda/miniconda3/lib/python3.13/site-packages/curl_cffi/requests/session.py\", line 652, in request\n    c.perform()\n    ~~~~~~~~~^^\n  File \"/Users/sakiyuka/MiniConda/miniconda3/lib/python3.13/site-packages/curl_cffi/curl.py\", line 422, in perform\n    self._check_error(ret, \"perform\")\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/Users/sakiyuka/MiniConda/miniconda3/lib/python3.13/site-packages/curl_cffi/curl.py\", line 199, in _check_error\n    raise error\ncurl_cffi.curl.CurlError: Failed to perform, curl: (56) Proxy CONNECT aborted. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/Users/sakiyuka/Downloads/MCN_new/backend/twitter_publisher.py\", line 893, in publish_single_tweet\n    session = await get_or_create_session(account_id)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/sakiyuka/Downloads/MCN_new/backend/twitter_publisher.py\", line 163, in get_or_create_session\n    await session.initialize()\n  File \"/Users/sakiyuka/Downloads/MCN_new/backend/twitter_publisher.py\", line 332, in initialize\n    await asyncio.to_thread(self._bootstrap_ct0_and_transaction)\n  File \"/Users/sakiyuka/MiniConda/miniconda3/lib/python3.13/asyncio/threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/sakiyuka/MiniConda/miniconda3/lib/python3.13/concurrent/futures/thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n  File \"/Users/sakiyuka/Downloads/MCN_new/backend/twitter_publisher.py\", line 378, in _bootstrap_ct0_and_transaction\n    resp = self._http.get(\n        f\"https://{DOMAIN}\",\n    ...<2 lines>...\n        allow_redirects=True,\n    )\n  File \"/Users/sakiyuka/MiniConda/miniconda3/lib/python3.13/site-packages/curl_cffi/requests/session.py\", l"
+  ]
+}

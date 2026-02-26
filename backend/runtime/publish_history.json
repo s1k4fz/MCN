@@ -110,5 +110,213 @@
     "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
     "queue_item_id": null,
     "published_at": "2026-02-23T05:05:56"
+  },
+  {
+    "id": "79c0182772cc45e5894e01d9117e2bab",
+    "account_id": "02e2e1212e4f4801b6a99e907215c430",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "11",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "账号 @JanetteB44121 没有绑定代理，为防止直连封号已拒绝发布。请先在代理池中为该账号绑定代理。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T17:55:09"
+  },
+  {
+    "id": "486c88c8ebc44b2aa6620d726947a949",
+    "account_id": "f9b6a2517be74b70a16c6ea088984959",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "账号 @AGlaysbroo30559 没有绑定代理，为防止直连封号已拒绝发布。请先在代理池中为该账号绑定代理。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T17:55:26"
+  },
+  {
+    "id": "302e4a19303b4f8e84f9fbaefdb549e3",
+    "account_id": "f9b6a2517be74b70a16c6ea088984959",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "11",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T18:07:24"
+  },
+  {
+    "id": "cd1c76786e3c426e92c13c8a954dced5",
+    "account_id": "69d19be004c54c73ab879599c1db7c94",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "无法获取 ct0 CSRF token. auth_token 可能已过期，请重新导入账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T18:39:59"
+  },
+  {
+    "id": "6e44cb833139445587be9dbc03adedad",
+    "account_id": "778c0bd6da5642eaa14419c431e1f95f",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T18:55:46"
+  },
+  {
+    "id": "2232e3d9ff154dea960893f80bff0280",
+    "account_id": "778c0bd6da5642eaa14419c431e1f95f",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "11",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:06:52"
+  },
+  {
+    "id": "d0dd4a60abc945b7bacdb7434a889c23",
+    "account_id": "0807f70b6b7349dfb4932fe9183b6428",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "1111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:19:42"
+  },
+  {
+    "id": "51b56b1bc464452bbd5ccbacf726fbb3",
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "1111111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:25:44"
+  },
+  {
+    "id": "45719d1b78c94d9588d4859156255958",
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "11111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "Twitter 检测到自动化行为 (226). 可能原因: 账号较新/信任度低、短时间内发推太频繁、内容触发风控。建议: 等待几分钟后重试，或换用更成熟的账号。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:30:31"
+  },
+  {
+    "id": "c3f9a9481768418bb91eca87e0355a12",
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "哈哈哈",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "代理服务器连接失败 (Failed to perform, curl: (56) Proxy CONNECT aborted. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.). 请检查代理是否过期或凭证是否有效。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:38:06"
+  },
+  {
+    "id": "4c41f0adb43a408386e83cb81f24584f",
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "failed",
+    "tweet_id": null,
+    "tweet_url": null,
+    "error_message": "账号 @knileom 绑定的代理 1531cf26e9d64c738c455037e134e9bf 状态为 dead（非 active/slow），为防止直连封号已拒绝发布。请更换代理。",
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:39:23"
+  },
+  {
+    "id": "2b595011349d4defa23f9d3338ea1387",
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "111",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "success",
+    "tweet_id": "2026985800349671670",
+    "tweet_url": "https://x.com/knileom/status/2026985800349671670",
+    "error_message": null,
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:40:49"
+  },
+  {
+    "id": "40ea9574c5184aa5af664c193d112a51",
+    "account_id": "3fade6ee03aa4c85a303f36103109083",
+    "tweet_type": "single-tweet",
+    "content": {
+      "text": "依旧测试",
+      "media_paths": null,
+      "is_sensitive": false
+    },
+    "status": "success",
+    "tweet_id": "2026990141848625414",
+    "tweet_url": "https://x.com/knileom/status/2026990141848625414",
+    "error_message": null,
+    "queue_item_id": null,
+    "published_at": "2026-02-26T19:58:04"
   }
 ]
