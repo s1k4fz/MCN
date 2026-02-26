@@ -1,17 +1,118 @@
 import base64
 import json
 import random
+import struct
 import time
+from pathlib import Path
 from typing import Any
 
 import msgpack
 import requests
-import xxtea
+
+
+# ---------------------------------------------------------------------------
+# 纯 Python XXTEA（兼容任意长度 key，与 JS 版行为一致）
+# ---------------------------------------------------------------------------
+
+def _to_uint32_array(data: bytes, include_length: bool) -> list[int]:
+    n = len(data)
+    m = (n + 3) // 4
+    result = list(struct.unpack(f"<{m}I", data.ljust(m * 4, b'\x00')))
+    if include_length:
+        result.append(n)
+    return result
+
+
+def _to_bytes(v: list[int], include_length: bool) -> bytes:
+    n = len(v)
+    raw = struct.pack(f"<{n}I", *v)
+    if include_length:
+        m = v[-1]
+        if m < 0 or m > (n - 1) * 4 or m < (n - 2) * 4:
+            return b""
+        return raw[:m]
+    return raw
+
+
+def _xxtea_encrypt_raw(v: list[int], k: list[int]) -> list[int]:
+    n = len(v)
+    if n < 2:
+        return v
+    DELTA = 0x9E3779B9
+    q = 6 + 52 // n
+    z = v[n - 1]
+    total = 0
+    for _ in range(q):
+        total = (total + DELTA) & 0xFFFFFFFF
+        e = (total >> 2) & 3
+        for p in range(n):
+            y = v[(p + 1) % n]
+            mx = (((z >> 5) ^ (y << 2)) + ((y >> 3) ^ (z << 4))) ^ ((total ^ y) + (k[(p & 3) ^ e] ^ z))
+            v[p] = (v[p] + mx) & 0xFFFFFFFF
+            z = v[p]
+    return v
+
+
+def _xxtea_decrypt_raw(v: list[int], k: list[int]) -> list[int]:
+    n = len(v)
+    if n < 2:
+        return v
+    DELTA = 0x9E3779B9
+    q = 6 + 52 // n
+    total = (q * DELTA) & 0xFFFFFFFF
+    y = v[0]
+    for _ in range(q):
+        e = (total >> 2) & 3
+        for p in range(n - 1, -1, -1):
+            z = v[(p - 1) % n]
+            mx = (((z >> 5) ^ (y << 2)) + ((y >> 3) ^ (z << 4))) ^ ((total ^ y) + (k[(p & 3) ^ e] ^ z))
+            v[p] = (v[p] - mx) & 0xFFFFFFFF
+            y = v[p]
+        total = (total - DELTA) & 0xFFFFFFFF
+    return v
+
+
+def _prepare_key(key: bytes) -> list[int]:
+    """将任意长度 key 转为 4 个 uint32（与 JS 版一致：截断或补零到 16 字节）"""
+    if len(key) < 16:
+        key = key.ljust(16, b'\x00')
+    return list(struct.unpack("<4I", key[:16]))
+
+
+def xxtea_encrypt(data: bytes, key: bytes) -> bytes:
+    v = _to_uint32_array(data, True)
+    k = _prepare_key(key)
+    return _to_bytes(_xxtea_encrypt_raw(v, k), False)
+
+
+def xxtea_decrypt(data: bytes, key: bytes) -> bytes:
+    v = _to_uint32_array(data, False)
+    k = _prepare_key(key)
+    return _to_bytes(_xxtea_decrypt_raw(v, k), True)
 
 # ==========================================
-# 👇 必填：把你浏览器 LocalStorage 里的 Token 粘贴到这里
-MY_REAL_TOKEN = "VRMVur6ZeFrmq%2BPfgcK6Ez8dCXPW0hDQf0BaqEJUkevIQehyF%2BQ52d32maWCE%2FwIFXO4g1q%2FiFJ%2BcWK1J0atG8As9RTycB9D"
+# Token 管理（优先从 runtime 文件加载）
 # ==========================================
+
+_BASE_DIR = Path(__file__).resolve().parent
+_RUNTIME_DIR = _BASE_DIR / "runtime"
+_TOKEN_FILE = _RUNTIME_DIR / "longmao_token.txt"
+
+_HARDCODED_TOKEN = "oBp%2BUVvG1q6ZDpxmAWITPXUeseRtWag4ODC%2BDYybim79dDQhFfJqkhLE2c0fleF3y07zkOegpDxLHmx3%2Fe1AOAsXdM9qLpvx"
+
+
+def _load_longmao_token() -> str:
+    if _TOKEN_FILE.exists():
+        try:
+            text = _TOKEN_FILE.read_text(encoding="utf-8").strip()
+            if text:
+                return text
+        except Exception:
+            pass
+    return _HARDCODED_TOKEN
+
+
+MY_REAL_TOKEN = _load_longmao_token()
 
 # 密钥配置
 REQUEST_KEY = "H#ufB@O1G5Rxnkm#hd@k76"
@@ -28,7 +129,7 @@ def get_parse_payload(video_url: str) -> dict[str, Any]:
         "time_zone": -480,
         "time_stamp": int(time.time()),
         "logined": True,
-        "token": MY_REAL_TOKEN,
+        "token": _load_longmao_token(),
         "debug": False,
         "content": video_url,
     }
@@ -36,14 +137,14 @@ def get_parse_payload(video_url: str) -> dict[str, Any]:
 
 def encrypt_data(data: dict[str, Any]) -> str:
     packed = msgpack.packb(data)
-    encrypted = xxtea.encrypt(packed, REQUEST_KEY.encode("utf-8"))
+    encrypted = xxtea_encrypt(packed, REQUEST_KEY.encode("utf-8"))
     return base64.b64encode(encrypted).decode("utf-8")
 
 
 def decrypt_response(text_response: str) -> dict[str, Any] | None:
     try:
         binary = base64.b64decode(text_response)
-        decrypted = xxtea.decrypt(binary, RESPONSE_KEY.encode("utf-8"))
+        decrypted = xxtea_decrypt(binary, RESPONSE_KEY.encode("utf-8"))
         return msgpack.unpackb(decrypted, raw=False) if decrypted else None
     except Exception:
         return None

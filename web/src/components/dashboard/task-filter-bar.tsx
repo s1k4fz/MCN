@@ -48,9 +48,6 @@ export function TaskFilterBar() {
     }
 
     if (payload.collectMode === "author") {
-      if (payload.authorPlatform !== "bilibili") {
-        throw new Error("当前仅支持 B站 指定作者采集")
-      }
       const response = await fetch(`${API_BASE}/api/tasks/collect/author`, {
         method: "POST",
         headers: {

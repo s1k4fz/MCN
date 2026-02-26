@@ -109,9 +109,14 @@ PLATFORM_DIRS = {
     USER_UPLOAD_PLATFORM_KEY: USER_UPLOAD_PLATFORM_NAME,
 }
 DEFAULT_SECOND_LEVEL_DIRS = ("单个作品", "指定作者")
-BILIBILI_UNDOWNLOADED_AUTHOR_DIR = "已采集未下载作者"
-BILIBILI_EXTRA_SECOND_LEVEL_DIRS = (BILIBILI_UNDOWNLOADED_AUTHOR_DIR,)
-BILIBILI_AUTHOR_TREE_DIRS = {"指定作者", BILIBILI_UNDOWNLOADED_AUTHOR_DIR}
+UNDOWNLOADED_AUTHOR_DIR = "已采集未下载作者"
+EXTRA_AUTHOR_SECOND_LEVEL_DIRS = (UNDOWNLOADED_AUTHOR_DIR,)
+PLATFORMS_WITH_AUTHOR_TREE = {"bilibili", "douyin", "xiaohongshu"}
+AUTHOR_TREE_DIRS = {"指定作者", UNDOWNLOADED_AUTHOR_DIR}
+# 向后兼容旧引用
+BILIBILI_UNDOWNLOADED_AUTHOR_DIR = UNDOWNLOADED_AUTHOR_DIR
+BILIBILI_EXTRA_SECOND_LEVEL_DIRS = EXTRA_AUTHOR_SECOND_LEVEL_DIRS
+BILIBILI_AUTHOR_TREE_DIRS = AUTHOR_TREE_DIRS
 INTERNAL_MATERIAL_FILE_NAMES = {".ds_store", "_author_meta.json"}
 _BILIBILI_CRAWLER: BilibiliCrawler | None = None
 DEFAULT_UA = (
@@ -246,13 +251,13 @@ def ensure_material_tree() -> None:
 def get_second_level_dirs(platform_key: str) -> tuple[str, ...]:
     if platform_key == USER_UPLOAD_PLATFORM_KEY:
         return ()
-    if platform_key == "bilibili":
-        return (*DEFAULT_SECOND_LEVEL_DIRS, *BILIBILI_EXTRA_SECOND_LEVEL_DIRS)
+    if platform_key in PLATFORMS_WITH_AUTHOR_TREE:
+        return (*DEFAULT_SECOND_LEVEL_DIRS, *EXTRA_AUTHOR_SECOND_LEVEL_DIRS)
     return DEFAULT_SECOND_LEVEL_DIRS
 
 
 def is_bilibili_author_tree(platform_key: str, second_dir_name: str) -> bool:
-    return platform_key == "bilibili" and second_dir_name in BILIBILI_AUTHOR_TREE_DIRS
+    return platform_key in PLATFORMS_WITH_AUTHOR_TREE and second_dir_name in AUTHOR_TREE_DIRS
 
 
 def infer_author_name_from_video_csv(author_dir: Path) -> str | None:
@@ -372,21 +377,21 @@ def validate_material_delete_target(target: Path) -> tuple[bool, str]:
     if depth == 3 and target.is_file() and platform_name == USER_UPLOAD_PLATFORM_NAME:
         return True, ""
 
-    # 允许删除 B站作者目录下的作品目录（第4层目录）。
+    # 允许删除作者目录下的作品目录（第4层目录）。
     if (
         depth == 4
         and target.is_dir()
-        and platform_name == PLATFORM_DIRS["bilibili"]
-        and second_name in BILIBILI_AUTHOR_TREE_DIRS
+        and platform_name in {v for k, v in PLATFORM_DIRS.items() if k in PLATFORMS_WITH_AUTHOR_TREE}
+        and second_name in AUTHOR_TREE_DIRS
     ):
         return True, ""
 
-    # 允许删除 B站作者作品目录下文件（第5层文件）。
+    # 允许删除作者作品目录下文件（第5层文件）。
     if (
         depth == 5
         and target.is_file()
-        and platform_name == PLATFORM_DIRS["bilibili"]
-        and second_name in BILIBILI_AUTHOR_TREE_DIRS
+        and platform_name in {v for k, v in PLATFORM_DIRS.items() if k in PLATFORMS_WITH_AUTHOR_TREE}
+        and second_name in AUTHOR_TREE_DIRS
     ):
         return True, ""
 
@@ -1869,10 +1874,10 @@ def create_author_collect_task(payload: AuthorCollectRequest) -> dict[str, Any]:
     ensure_material_tree()
 
     platform = normalize_platform_type(payload.platform)
-    if platform != "bilibili":
+    if platform not in PLATFORMS_WITH_AUTHOR_TREE:
         return {
             "success": False,
-            "message": "当前仅支持 B站 指定作者采集",
+            "message": f"不支持的平台: {platform}，支持: B站、抖音、小红书",
             "results": [],
             "success_count": 0,
             "failure_count": 0,
@@ -2479,6 +2484,193 @@ def bilibili_cookie_status() -> dict[str, Any]:
     """返回当前 B 站 Cookie 状态"""
     from bilibili_crawler import get_cookie_info
     return get_cookie_info()
+
+
+class CookieSetRequest(BaseModel):
+    cookie: str = Field(..., min_length=1)
+
+
+@app.post("/api/bilibili/cookie/set")
+def bilibili_cookie_set(payload: CookieSetRequest) -> dict[str, Any]:
+    """手动设置 B 站 Cookie"""
+    from bilibili_crawler import update_cookie
+    cookie_str = payload.cookie.strip()
+    if not cookie_str:
+        return {"success": False, "message": "Cookie 不能为空"}
+    update_cookie(cookie_str)
+    keys = [k.strip().split("=")[0] for k in cookie_str.split(";") if "=" in k]
+    return {
+        "success": True,
+        "message": f"已保存，包含 {len(keys)} 个字段",
+        "key_count": len(keys),
+        "keys_found": keys,
+    }
+
+
+@app.get("/api/bilibili/cookie/get")
+def bilibili_cookie_get() -> dict[str, Any]:
+    """返回当前 B 站 Cookie 原文"""
+    from bilibili_crawler import _load_cookie
+    return {"cookie": _load_cookie()}
+
+
+@app.get("/api/douyin/cookie/get")
+def douyin_cookie_get() -> dict[str, Any]:
+    """返回当前抖音 Cookie 原文"""
+    return {"cookie": _load_douyin_cookie()}
+
+
+@app.get("/api/xiaohongshu/cookie/get")
+def xhs_cookie_get() -> dict[str, Any]:
+    """返回当前小红书 Cookie 原文"""
+    return {"cookie": _load_xhs_cookie()}
+
+
+# ==========================================================================
+# Longmao Token API
+# ==========================================================================
+
+_LONGMAO_TOKEN_FILE = MATERIALS_ROOT.parent / "backend" / "runtime" / "longmao_token.txt"
+
+
+def _load_longmao_token() -> str:
+    if _LONGMAO_TOKEN_FILE.exists():
+        try:
+            text = _LONGMAO_TOKEN_FILE.read_text(encoding="utf-8").strip()
+            if text:
+                return text
+        except Exception:
+            pass
+    return ""
+
+
+@app.post("/api/longmao/token/set")
+def longmao_token_set(payload: CookieSetRequest) -> dict[str, Any]:
+    """手动设置 Longmao Token"""
+    token_str = payload.cookie.strip()
+    if not token_str:
+        return {"success": False, "message": "Token 不能为空"}
+    _LONGMAO_TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
+    _LONGMAO_TOKEN_FILE.write_text(token_str, encoding="utf-8")
+    return {
+        "success": True,
+        "message": "Token 已保存",
+        "key_count": 1,
+    }
+
+
+@app.get("/api/longmao/token/status")
+def longmao_token_status() -> dict[str, Any]:
+    """返回当前 Longmao Token 状态"""
+    token = _load_longmao_token()
+    return {
+        "is_set": bool(token),
+        "source": "file" if _LONGMAO_TOKEN_FILE.exists() and token else "none",
+        "key_count": 1 if token else 0,
+    }
+
+
+@app.get("/api/longmao/token/get")
+def longmao_token_get() -> dict[str, Any]:
+    """返回当前 Longmao Token 原文"""
+    return {"cookie": _load_longmao_token()}
+
+
+# ==========================================================================
+# Douyin Cookie API
+# ==========================================================================
+
+_DOUYIN_COOKIE_FILE = MATERIALS_ROOT.parent / "backend" / "runtime" / "douyin_cookie.txt"
+
+
+def _load_douyin_cookie() -> str:
+    if _DOUYIN_COOKIE_FILE.exists():
+        try:
+            text = _DOUYIN_COOKIE_FILE.read_text(encoding="utf-8").strip()
+            if text:
+                return text
+        except Exception:
+            pass
+    return os.getenv("DOUYIN_COOKIE", "").strip()
+
+
+
+@app.post("/api/douyin/cookie/set")
+def douyin_cookie_set(payload: CookieSetRequest) -> dict[str, Any]:
+    """手动设置抖音 Cookie"""
+    cookie_str = payload.cookie.strip()
+    if not cookie_str:
+        return {"success": False, "message": "Cookie 不能为空"}
+    _DOUYIN_COOKIE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    _DOUYIN_COOKIE_FILE.write_text(cookie_str, encoding="utf-8")
+    keys = [k.strip().split("=")[0] for k in cookie_str.split(";") if "=" in k]
+    return {
+        "success": True,
+        "message": f"已保存，包含 {len(keys)} 个字段",
+        "key_count": len(keys),
+        "keys_found": keys,
+    }
+
+
+@app.get("/api/douyin/cookie/status")
+def douyin_cookie_status() -> dict[str, Any]:
+    """返回当前抖音 Cookie 状态"""
+    cookie = _load_douyin_cookie()
+    keys = [k.strip().split("=")[0] for k in cookie.split(";") if "=" in k] if cookie else []
+    return {
+        "is_set": bool(cookie),
+        "source": "file" if _DOUYIN_COOKIE_FILE.exists() and cookie else ("env" if cookie else "none"),
+        "keys": keys,
+        "key_count": len(keys),
+    }
+
+
+# ==========================================================================
+# Xiaohongshu Cookie API
+# ==========================================================================
+
+_XHS_COOKIE_FILE = MATERIALS_ROOT.parent / "backend" / "runtime" / "xhs_cookie.txt"
+
+
+def _load_xhs_cookie() -> str:
+    if _XHS_COOKIE_FILE.exists():
+        try:
+            text = _XHS_COOKIE_FILE.read_text(encoding="utf-8").strip()
+            if text:
+                return text
+        except Exception:
+            pass
+    return os.getenv("XHS_COOKIE", "").strip()
+
+
+@app.post("/api/xiaohongshu/cookie/set")
+def xhs_cookie_set(payload: CookieSetRequest) -> dict[str, Any]:
+    """手动设置小红书 Cookie"""
+    cookie_str = payload.cookie.strip()
+    if not cookie_str:
+        return {"success": False, "message": "Cookie 不能为空"}
+    _XHS_COOKIE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    _XHS_COOKIE_FILE.write_text(cookie_str, encoding="utf-8")
+    keys = [k.strip().split("=")[0] for k in cookie_str.split(";") if "=" in k]
+    return {
+        "success": True,
+        "message": f"已保存，包含 {len(keys)} 个字段",
+        "key_count": len(keys),
+        "keys_found": keys,
+    }
+
+
+@app.get("/api/xiaohongshu/cookie/status")
+def xhs_cookie_status() -> dict[str, Any]:
+    """返回当前小红书 Cookie 状态"""
+    cookie = _load_xhs_cookie()
+    keys = [k.strip().split("=")[0] for k in cookie.split(";") if "=" in k] if cookie else []
+    return {
+        "is_set": bool(cookie),
+        "source": "file" if _XHS_COOKIE_FILE.exists() and cookie else ("env" if cookie else "none"),
+        "keys": keys,
+        "key_count": len(keys),
+    }
 
 
 # ==========================================================================

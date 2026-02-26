@@ -1,0 +1,98 @@
+{
+  "id": "b62e4bc82d1d4dfa8987cee0db2cbf4f",
+  "kind": "collect-author",
+  "task_type": "collect",
+  "collect_mode": "author",
+  "title": "指定作者采集任务",
+  "description": "按作者 UID 执行采集流程。",
+  "status": "completed",
+  "progress": {
+    "current": 2,
+    "total": 2,
+    "percent": 100
+  },
+  "created_at": "2026-02-26T13:53:19",
+  "updated_at": "2026-02-26T13:53:53",
+  "started_at": "2026-02-26T13:53:19",
+  "ended_at": "2026-02-26T13:53:53",
+  "worker_pid": 15153,
+  "payload": {
+    "platform": "douyin",
+    "collect_action": "collect-download",
+    "uids": [
+      "0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/dZda_SQKvl4/ 7@3.com :2pm"
+    ],
+    "title": "指定作者采集任务",
+    "description": "按作者 UID 执行采集流程。"
+  },
+  "results": [
+    {
+      "success": true,
+      "uid": "0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/dZda_SQKvl4/ 7@3.com :2pm",
+      "collect_action": "collect-download",
+      "platform": "douyin",
+      "platform_display_name": "抖音",
+      "error": null,
+      "crawler_error": null,
+      "total_count": 5,
+      "success_count": 5,
+      "failure_count": 0,
+      "details": [
+        {
+          "success": true,
+          "mode": "collect-download",
+          "uid": "209323006887402",
+          "title": "新年的快乐打包发🌹祝愿大家平安幸福",
+          "video_folder": "新年的快乐打包发🌹祝愿大家平安幸福_2",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "collect-download",
+          "uid": "209323006887402",
+          "title": "爱你，是我此生最浪漫的事",
+          "video_folder": "爱你，是我此生最浪漫的事_2",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "collect-download",
+          "uid": "209323006887402",
+          "title": "一边游泳一边逗小孩",
+          "video_folder": "一边游泳一边逗小孩_2",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "collect-download",
+          "uid": "209323006887402",
+          "title": "作品_4",
+          "video_folder": "作品_4_2",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "collect-download",
+          "uid": "209323006887402",
+          "title": "#原相机 分享最真实的自己",
+          "video_folder": "#原相机 分享最真实的自己_2",
+          "csv_file": "video_data.csv"
+        }
+      ]
+    }
+  ],
+  "result_summary": {
+    "total_count": 1,
+    "success_count": 1,
+    "failure_count": 0
+  },
+  "error": null,
+  "logs": [
+    "[13:53:19] 任务已加入后台队列，待处理 UID 数: 1",
+    "[13:53:19] 后台任务已启动",
+    "[13:53:19] 开始执行指定作者采集，UID 数: 1",
+    "[13:53:19] 正在处理 UID 0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/dZda_SQKvl4/ 7@3.com :2pm (1/1)",
+    "[13:53:53] UID 0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/dZda_SQKvl4/ 7@3.com :2pm 处理成功（成功 5 条）",
+    "[13:53:53] 任务结束: 成功 1 / 失败 0"
+  ]
+}

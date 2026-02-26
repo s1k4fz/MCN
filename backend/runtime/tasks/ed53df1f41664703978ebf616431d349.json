@@ -1,0 +1,57 @@
+{
+  "id": "ed53df1f41664703978ebf616431d349",
+  "kind": "collect-author",
+  "task_type": "collect",
+  "collect_mode": "author",
+  "title": "指定作者采集任务",
+  "description": "按作者 UID 执行采集流程。",
+  "status": "failed",
+  "progress": {
+    "current": 2,
+    "total": 2,
+    "percent": 100
+  },
+  "created_at": "2026-02-26T12:39:22",
+  "updated_at": "2026-02-26T12:39:22",
+  "started_at": "2026-02-26T12:39:22",
+  "ended_at": "2026-02-26T12:39:22",
+  "worker_pid": 54404,
+  "payload": {
+    "platform": "xiaohongshu",
+    "collect_action": "data-only",
+    "uids": [
+      "https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a"
+    ],
+    "title": "指定作者采集任务",
+    "description": "按作者 UID 执行采集流程。"
+  },
+  "results": [
+    {
+      "success": false,
+      "uid": "https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a",
+      "collect_action": "data-only",
+      "platform": "xiaohongshu",
+      "platform_display_name": "小红书",
+      "error": "Missing 'a1' in cookies",
+      "crawler_error": null,
+      "total_count": 0,
+      "success_count": 0,
+      "failure_count": 0,
+      "details": []
+    }
+  ],
+  "result_summary": {
+    "total_count": 1,
+    "success_count": 0,
+    "failure_count": 1
+  },
+  "error": "部分作者采集失败（成功 0 / 失败 1）",
+  "logs": [
+    "[12:39:22] 任务已加入后台队列，待处理 UID 数: 1",
+    "[12:39:22] 后台任务已启动",
+    "[12:39:22] 开始执行指定作者采集，UID 数: 1",
+    "[12:39:22] 正在处理 UID https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a (1/1)",
+    "[12:39:22] UID https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a 处理失败: Missing 'a1' in cookies",
+    "[12:39:22] 任务结束: 成功 0 / 失败 1"
+  ]
+}

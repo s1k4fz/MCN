@@ -1,0 +1,55 @@
+{
+  "id": "41150a7a49d941ae986d30307dbcb543",
+  "kind": "collect-author",
+  "task_type": "collect",
+  "collect_mode": "author",
+  "title": "指定作者采集任务",
+  "description": "按作者 UID 执行采集流程。",
+  "status": "completed",
+  "progress": {
+    "current": 2,
+    "total": 2,
+    "percent": 100
+  },
+  "created_at": "2026-02-26T11:44:40",
+  "updated_at": "2026-02-26T11:44:41",
+  "started_at": "2026-02-26T11:44:40",
+  "ended_at": "2026-02-26T11:44:41",
+  "worker_pid": 21074,
+  "payload": {
+    "platform": "xiaohongshu",
+    "collect_action": "data-only",
+    "author_urls": [
+      "https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a"
+    ],
+    "title": "指定作者采集任务",
+    "description": "按作者 UID 执行采集流程。"
+  },
+  "results": [
+    {
+      "success": true,
+      "url": "https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a",
+      "platform": "xiaohongshu",
+      "platform_display_name": "小红书",
+      "nickname": "喝露水的Tina",
+      "note_count": 0,
+      "csv_path": "/Users/sakiyuka/Downloads/MCN_new/backend/materials/小红书/指定作者/喝露水的Tina/note_data.csv",
+      "error": null
+    }
+  ],
+  "result_summary": {
+    "total_count": 1,
+    "success_count": 1,
+    "failure_count": 0
+  },
+  "error": null,
+  "logs": [
+    "[11:44:40] 任务已加入后台队列，待处理数: 1",
+    "[11:44:40] 后台任务已启动",
+    "[11:44:40] 开始执行小红书指定作者采集，URL 数: 1",
+    "[11:44:40] 已加载小红书 Cookie（15 个字段）",
+    "[11:44:41] 正在处理 URL https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a (1/1)",
+    "[11:44:41] https://www.xiaohongshu.com/user/profile/5b72299d22d4d600011e2c83?xsec_token=YBocti6LsSR8VbJtkjVDazOhc4xamd2FWaSO3E0_h-kSQ=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODw0MERGSkw2NzUyOTgwNjY6OTc4NjlC&apptime=1772076672&share_id=0d6b87c1b3644a11b9d045245b3b737a 采集成功: 喝露水的Tina，共 0 条笔记",
+    "[11:44:41] 任务结束: 成功 1 / 失败 0"
+  ]
+}

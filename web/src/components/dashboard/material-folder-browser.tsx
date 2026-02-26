@@ -29,7 +29,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"
 const USER_UPLOAD_ROOT_ID = "user-upload"
 const USER_UPLOAD_ROOT_NAME = "用户上传"
 const SPECIAL_BILIBILI_SUBFOLDER = "已采集未下载作者"
-const BILIBILI_AUTHOR_SUBFOLDERS = new Set(["指定作者", SPECIAL_BILIBILI_SUBFOLDER])
+const AUTHOR_SUBFOLDERS = new Set(["指定作者", SPECIAL_BILIBILI_SUBFOLDER])
 
 const fallbackRootFolders: RootFolder[] = [
   {
@@ -51,6 +51,11 @@ const fallbackRootFolders: RootFolder[] = [
     children: [
       { id: "xiaohongshu-single", name: "单个作品", children: [] },
       { id: "xiaohongshu-author", name: "指定作者", children: [] },
+      {
+        id: "xiaohongshu-collected-authors",
+        name: SPECIAL_BILIBILI_SUBFOLDER,
+        children: [],
+      },
     ],
   },
   {
@@ -59,6 +64,11 @@ const fallbackRootFolders: RootFolder[] = [
     children: [
       { id: "douyin-single", name: "单个作品", children: [] },
       { id: "douyin-author", name: "指定作者", children: [] },
+      {
+        id: "douyin-collected-authors",
+        name: SPECIAL_BILIBILI_SUBFOLDER,
+        children: [],
+      },
     ],
   },
   {
@@ -145,7 +155,8 @@ function normalizeRoots(roots: unknown[]): RootFolder[] {
 }
 
 function isAuthorNestedSubfolder(rootId: string, subfolderName: string): boolean {
-  return rootId === "bilibili" && BILIBILI_AUTHOR_SUBFOLDERS.has(subfolderName)
+  const platformsWithAuthorTree = new Set(["bilibili", "xiaohongshu", "douyin"])
+  return platformsWithAuthorTree.has(rootId) && AUTHOR_SUBFOLDERS.has(subfolderName)
 }
 
 function getMaterialDepth(relativePath?: string): number {

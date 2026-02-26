@@ -1,0 +1,98 @@
+{
+  "id": "39f74c81589149569ce3b6563e7cff2d",
+  "kind": "collect-author",
+  "task_type": "collect",
+  "collect_mode": "author",
+  "title": "指定作者采集任务",
+  "description": "按作者 UID 执行采集流程。",
+  "status": "completed",
+  "progress": {
+    "current": 2,
+    "total": 2,
+    "percent": 100
+  },
+  "created_at": "2026-02-26T12:50:31",
+  "updated_at": "2026-02-26T12:50:32",
+  "started_at": "2026-02-26T12:50:32",
+  "ended_at": "2026-02-26T12:50:32",
+  "worker_pid": 86051,
+  "payload": {
+    "platform": "xiaohongshu",
+    "collect_action": "data-only",
+    "uids": [
+      "https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search"
+    ],
+    "title": "指定作者采集任务",
+    "description": "按作者 UID 执行采集流程。"
+  },
+  "results": [
+    {
+      "success": true,
+      "uid": "https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search",
+      "collect_action": "data-only",
+      "platform": "xiaohongshu",
+      "platform_display_name": "小红书",
+      "error": null,
+      "crawler_error": null,
+      "total_count": 5,
+      "success_count": 5,
+      "failure_count": 0,
+      "details": [
+        {
+          "success": true,
+          "mode": "data-only",
+          "uid": "6620aafc0000000007004139",
+          "title": "ADVX2025通过啦！来看看我的故事吧！",
+          "video_folder": "ADVX2025通过啦！来看看我的故事吧！",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "data-only",
+          "uid": "6620aafc0000000007004139",
+          "title": "用公式推演你我在AI时代的命运",
+          "video_folder": "用公式推演你我在AI时代的命运",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "data-only",
+          "uid": "6620aafc0000000007004139",
+          "title": "潮水退去：AI产品的壁垒究竟在哪里？",
+          "video_folder": "潮水退去：AI产品的壁垒究竟在哪里？",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "data-only",
+          "uid": "6620aafc0000000007004139",
+          "title": "AI正在颠覆计算机的学习路径",
+          "video_folder": "AI正在颠覆计算机的学习路径",
+          "csv_file": "video_data.csv"
+        },
+        {
+          "success": true,
+          "mode": "data-only",
+          "uid": "6620aafc0000000007004139",
+          "title": "你的下一本书，何必是图书？——Refbook",
+          "video_folder": "你的下一本书，何必是图书？——Refbook",
+          "csv_file": "video_data.csv"
+        }
+      ]
+    }
+  ],
+  "result_summary": {
+    "total_count": 1,
+    "success_count": 1,
+    "failure_count": 0
+  },
+  "error": null,
+  "logs": [
+    "[12:50:31] 任务已加入后台队列，待处理 UID 数: 1",
+    "[12:50:32] 后台任务已启动",
+    "[12:50:32] 开始执行指定作者采集，UID 数: 1",
+    "[12:50:32] 正在处理 UID https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search (1/1)",
+    "[12:50:32] UID https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search 处理成功（成功 5 条）",
+    "[12:50:32] 任务结束: 成功 1 / 失败 0"
+  ]
+}

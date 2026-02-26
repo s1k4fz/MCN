@@ -802,6 +802,431 @@ def run_bili_task(uid: str, collect_mode: CollectMode = "collect-download") -> N
     print(f"📁 输出目录: {workspace_dir}")
 
 
+# =========================================================================
+# 抖音按作者采集
+# =========================================================================
+
+def collect_douyin_author_materials(
+    author_input: str,
+    undownloaded_root: Path,
+    collect_mode: CollectMode = "collect-download",
+    downloaded_root: Path | None = None,
+) -> dict[str, Any]:
+    """
+    抖音作者采集入口：
+    - author_input: 作者主页 URL 或 sec_user_id
+    - data-only: 仅采集元数据 CSV
+    - collect-download: 采集 + 下载视频/图片
+    """
+    from douyin_crawler import DouyinCrawler, resolve_author_id
+
+    author_input = str(author_input).strip()
+    if not author_input:
+        return {"ok": False, "author_input": author_input, "error": "输入不能为空", "results": []}
+
+    print(f"\n🎵 [抖音模式] 初始化作者采集，输入={author_input}，模式={collect_mode}")
+
+    # 1. 解析 sec_user_id
+    try:
+        sec_user_id = resolve_author_id(author_input)
+    except Exception as exc:
+        return {"ok": False, "author_input": author_input, "error": str(exc), "results": []}
+
+    # 2. 获取作者信息
+    crawler = DouyinCrawler()
+    author_info = crawler.get_author_info(sec_user_id)
+    author_name = author_info.get("nickname") or sec_user_id
+    author_uid = author_info.get("uid") or sec_user_id
+    print(f"   作者: {author_name} (uid={author_uid}, sec_uid={sec_user_id[:20]}...)")
+
+    # 3. 采集作品列表
+    videos = crawler.get_all_videos(sec_user_id)
+    if not videos:
+        error = "未找到作品或 sec_user_id 错误"
+        if crawler.last_error:
+            error = crawler.last_error.get("error", error)
+        return {
+            "ok": False,
+            "author_input": author_input,
+            "sec_user_id": sec_user_id,
+            "error": error,
+            "results": [],
+        }
+
+    print(f"   共获取 {len(videos)} 个作品")
+
+    # 4. 创建作者目录
+    pending_author_dir, author_meta = resolve_author_dir(
+        undownloaded_root, author_uid, author_name
+    )
+
+    downloaded_author_dir: Path | None = None
+    if collect_mode == "collect-download":
+        if downloaded_root is None:
+            return {
+                "ok": False,
+                "author_input": author_input,
+                "error": "collect-download 模式需要 downloaded_root",
+                "results": [],
+            }
+        downloaded_author_dir, _ = resolve_author_dir(
+            downloaded_root, author_uid, author_name
+        )
+
+    # 5. 逐个处理作品
+    all_results: list[dict[str, Any]] = []
+
+    for index, video in enumerate(videos, start=1):
+        raw_title = str(video.get("desc") or f"作品_{index}")
+        safe_title = sanitize_folder_name(raw_title)
+
+        # 构造 CSV 行数据
+        csv_row = {
+            "aweme_id": video.get("aweme_id", ""),
+            "title": raw_title,
+            "author_name": video.get("author_nickname", ""),
+            "author_uid": video.get("author_uid", ""),
+            "create_time": video.get("create_time", ""),
+            "digg_count": video.get("digg_count", 0),
+            "comment_count": video.get("comment_count", 0),
+            "share_count": video.get("share_count", 0),
+            "collect_count": video.get("collect_count", 0),
+            "play_count": video.get("play_count", 0),
+            "cover_url": video.get("cover_url", ""),
+            "play_url": video.get("play_url", ""),
+            "link": video.get("video_link", ""),
+            "type": "video" if video.get("aweme_type", 0) != 68 else "image_set",
+        }
+
+        if collect_mode == "data-only":
+            video_dir = make_unique_dir(pending_author_dir, safe_title)
+            video_dir.mkdir(parents=True, exist_ok=True)
+            csv_path = video_dir / "video_data.csv"
+            save_single_row_csv(csv_row, csv_path)
+            all_results.append({
+                "success": True,
+                "mode": collect_mode,
+                "uid": author_uid,
+                "title": raw_title,
+                "video_folder": video_dir.name,
+                "csv_file": csv_path.name,
+            })
+            continue
+
+        # collect-download: 通过 longmao_parser 解析作品直链并下载
+        if downloaded_author_dir is None:
+            all_results.append({
+                "success": False, "mode": collect_mode,
+                "uid": author_uid, "title": raw_title,
+                "error": "下载目录未初始化",
+            })
+            continue
+
+        video_dir = make_unique_dir(downloaded_author_dir, safe_title)
+        video_dir.mkdir(parents=True, exist_ok=True)
+        csv_path = video_dir / "video_data.csv"
+        save_single_row_csv(csv_row, csv_path)
+
+        # 通过 longmao_parser 解析作品获取高清直链
+        video_link = video.get("video_link", "")
+        download_ok = False
+        download_error = ""
+
+        if not video_link:
+            download_error = "作品链接为空，无法解析"
+        else:
+            try:
+                print(f"   🎵 [{index}/{len(videos)}] 解析作品: {raw_title[:30]}")
+                parsed = parse_content_data(video_link)
+
+                if not parsed.get("ok"):
+                    download_error = f"解析失败: {parsed.get('error', '未知错误')}"
+                    print(f"   ❌ 解析失败: {download_error}")
+                else:
+                    extracted = parsed.get("extracted", {})
+                    dl_videos = extracted.get("videos", [])
+                    dl_images = extracted.get("images", [])
+                    cover_url = extracted.get("cover")
+                    audio_url = extracted.get("audio")
+
+                    # 下载封面
+                    if cover_url:
+                        ext = guess_extension(cover_url, ".jpg")
+                        out_path = video_dir / f"cover{ext}"
+                        dl_result = download_to_file(cover_url, out_path, purpose="cover")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    # 下载视频
+                    for vid_idx, vid_url in enumerate(dl_videos, 1):
+                        ext = guess_extension(vid_url, ".mp4")
+                        out_path = video_dir / f"video_{vid_idx}{ext}"
+                        dl_result = download_to_file(vid_url, out_path, purpose=f"video_{vid_idx}")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    # 下载图片
+                    for img_idx, img_url in enumerate(dl_images, 1):
+                        ext = guess_extension(img_url, ".jpg")
+                        out_path = video_dir / f"image_{img_idx}{ext}"
+                        dl_result = download_to_file(img_url, out_path, purpose=f"image_{img_idx}")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    # 下载音频
+                    if audio_url:
+                        ext = guess_extension(audio_url, ".mp3")
+                        out_path = video_dir / f"audio{ext}"
+                        dl_result = download_to_file(audio_url, out_path, purpose="audio")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    if not dl_videos and not dl_images and not cover_url:
+                        download_error = "解析成功但无可下载的媒体"
+
+                # 请求间隔，避免触发风控
+                import random as _rand
+                time.sleep(_rand.uniform(1.0, 2.5))
+
+            except Exception as exc:
+                download_error = f"解析/下载异常: {exc}"
+
+        all_results.append({
+            "success": download_ok or (not download_error),
+            "mode": collect_mode,
+            "uid": author_uid,
+            "title": raw_title,
+            "video_folder": video_dir.name,
+            "csv_file": csv_path.name,
+            **({"error": download_error} if download_error else {}),
+        })
+
+    success_count = sum(1 for r in all_results if r.get("success"))
+    print(f"   处理完成: 成功 {success_count}/{len(all_results)}")
+
+    return {
+        "ok": True,
+        "uid": author_uid,
+        "sec_user_id": sec_user_id,
+        "author_name": author_meta.get("author_name"),
+        "collect_mode": collect_mode,
+        "total_count": len(all_results),
+        "success_count": success_count,
+        "failure_count": len(all_results) - success_count,
+        "results": all_results,
+    }
+
+
+# =========================================================================
+# 小红书按作者采集
+# =========================================================================
+
+def collect_xhs_author_materials(
+    author_input: str,
+    undownloaded_root: Path,
+    collect_mode: CollectMode = "collect-download",
+    downloaded_root: Path | None = None,
+) -> dict[str, Any]:
+    """
+    小红书作者采集入口：
+    - author_input: 作者主页 URL 或 user_id
+    - data-only: 仅采集元数据 CSV
+    - collect-download: 采集 + 下载封面/图片
+    """
+    from xiaohongshu_crawler import XiaohongshuCrawler
+
+    author_input = str(author_input).strip()
+    if not author_input:
+        return {"ok": False, "author_input": author_input, "error": "输入不能为空", "results": []}
+
+    print(f"\n📕 [小红书模式] 初始化作者采集，输入={author_input}，模式={collect_mode}")
+
+    # 1. 解析 user_id
+    crawler = XiaohongshuCrawler()
+    try:
+        user_id = crawler.resolve_user_id(author_input)
+    except Exception as exc:
+        return {"ok": False, "author_input": author_input, "error": str(exc), "results": []}
+
+    # 2. 获取作者信息
+    author_info = crawler.get_author_info(user_id)
+    author_name = author_info.get("nickname") or user_id
+    print(f"   作者: {author_name} (user_id={user_id})")
+
+    # 3. 采集笔记列表
+    notes = crawler.get_all_notes(user_id)
+    if not notes:
+        error = "未找到笔记或 user_id 错误"
+        if crawler.last_error:
+            error = crawler.last_error.get("error", error)
+        return {
+            "ok": False,
+            "author_input": author_input,
+            "user_id": user_id,
+            "error": error,
+            "results": [],
+        }
+
+    print(f"   共获取 {len(notes)} 篇笔记")
+
+    # 4. 创建作者目录
+    pending_author_dir, author_meta = resolve_author_dir(
+        undownloaded_root, user_id, author_name
+    )
+
+    downloaded_author_dir: Path | None = None
+    if collect_mode == "collect-download":
+        if downloaded_root is None:
+            return {
+                "ok": False,
+                "author_input": author_input,
+                "error": "collect-download 模式需要 downloaded_root",
+                "results": [],
+            }
+        downloaded_author_dir, _ = resolve_author_dir(
+            downloaded_root, user_id, author_name
+        )
+
+    # 5. 逐个处理笔记
+    all_results: list[dict[str, Any]] = []
+
+    for index, note in enumerate(notes, start=1):
+        raw_title = str(note.get("display_title") or note.get("desc") or f"笔记_{index}")
+        safe_title = sanitize_folder_name(raw_title)
+
+        csv_row = {
+            "note_id": note.get("note_id", ""),
+            "title": raw_title,
+            "desc": note.get("desc", ""),
+            "author_name": note.get("author_nickname", ""),
+            "author_user_id": note.get("author_user_id", ""),
+            "type": note.get("type", ""),
+            "liked_count": note.get("liked_count", "0"),
+            "collected_count": note.get("collected_count", "0"),
+            "comment_count": note.get("comment_count", "0"),
+            "share_count": note.get("share_count", "0"),
+            "cover_url": note.get("cover_url", ""),
+            "link": note.get("note_link", ""),
+        }
+
+        if collect_mode == "data-only":
+            note_dir = make_unique_dir(pending_author_dir, safe_title)
+            note_dir.mkdir(parents=True, exist_ok=True)
+            csv_path = note_dir / "video_data.csv"
+            save_single_row_csv(csv_row, csv_path)
+            all_results.append({
+                "success": True,
+                "mode": collect_mode,
+                "uid": user_id,
+                "title": raw_title,
+                "video_folder": note_dir.name,
+                "csv_file": csv_path.name,
+            })
+            continue
+
+        # collect-download: 通过 longmao_parser 解析笔记直链并下载
+        if downloaded_author_dir is None:
+            all_results.append({
+                "success": False, "mode": collect_mode,
+                "uid": user_id, "title": raw_title,
+                "error": "下载目录未初始化",
+            })
+            continue
+
+        note_dir = make_unique_dir(downloaded_author_dir, safe_title)
+        note_dir.mkdir(parents=True, exist_ok=True)
+        csv_path = note_dir / "video_data.csv"
+        save_single_row_csv(csv_row, csv_path)
+
+        # 通过 longmao_parser 解析笔记获取高清直链
+        note_link = note.get("note_link", "")
+        download_ok = False
+        download_error = ""
+
+        if not note_link:
+            download_error = "笔记链接为空，无法解析"
+        else:
+            try:
+                print(f"   📕 [{index}/{len(notes)}] 解析笔记: {raw_title[:30]}")
+                parsed = parse_content_data(note_link)
+
+                if not parsed.get("ok"):
+                    download_error = f"解析失败: {parsed.get('error', '未知错误')}"
+                    print(f"   ❌ 解析失败: {download_error}")
+                else:
+                    extracted = parsed.get("extracted", {})
+                    videos = extracted.get("videos", [])
+                    images = extracted.get("images", [])
+                    cover_url = extracted.get("cover")
+                    audio_url = extracted.get("audio")
+
+                    # 下载封面
+                    if cover_url:
+                        ext = guess_extension(cover_url, ".jpg")
+                        out_path = note_dir / f"cover{ext}"
+                        dl_result = download_to_file(cover_url, out_path, purpose="cover")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    # 下载视频
+                    for vid_idx, vid_url in enumerate(videos, 1):
+                        ext = guess_extension(vid_url, ".mp4")
+                        out_path = note_dir / f"video_{vid_idx}{ext}"
+                        dl_result = download_to_file(vid_url, out_path, purpose=f"video_{vid_idx}")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    # 下载图片
+                    for img_idx, img_url in enumerate(images, 1):
+                        ext = guess_extension(img_url, ".jpg")
+                        out_path = note_dir / f"image_{img_idx}{ext}"
+                        dl_result = download_to_file(img_url, out_path, purpose=f"image_{img_idx}")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    # 下载音频
+                    if audio_url:
+                        ext = guess_extension(audio_url, ".mp3")
+                        out_path = note_dir / f"audio{ext}"
+                        dl_result = download_to_file(audio_url, out_path, purpose="audio")
+                        if dl_result.get("ok"):
+                            download_ok = True
+
+                    if not videos and not images and not cover_url:
+                        download_error = "解析成功但无可下载的媒体"
+
+                # 请求间隔，避免触发风控
+                import random as _rand
+                time.sleep(_rand.uniform(1.0, 2.5))
+
+            except Exception as exc:
+                download_error = f"解析/下载异常: {exc}"
+
+        all_results.append({
+            "success": download_ok or (not download_error),
+            "mode": collect_mode,
+            "uid": user_id,
+            "title": raw_title,
+            "video_folder": note_dir.name,
+            "csv_file": csv_path.name,
+            **({"error": download_error} if download_error else {}),
+        })
+
+    success_count = sum(1 for r in all_results if r.get("success"))
+    print(f"   处理完成: 成功 {success_count}/{len(all_results)}")
+
+    return {
+        "ok": True,
+        "uid": user_id,
+        "author_name": author_meta.get("author_name"),
+        "collect_mode": collect_mode,
+        "total_count": len(all_results),
+        "success_count": success_count,
+        "failure_count": len(all_results) - success_count,
+        "results": all_results,
+    }
+
+
 if __name__ == "__main__":
     print("=" * 50)
     print("      🔥 全能媒体采集下载器 (稳定版) 🔥")

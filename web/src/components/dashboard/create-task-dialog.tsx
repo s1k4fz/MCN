@@ -90,7 +90,7 @@ export function CreateTaskDialog({
     }
     if (collectMode === "author") {
       return (
-        authorPlatform === "bilibili" &&
+        authorPlatform !== null &&
         Boolean(authorCollectAction) &&
         authorUids.some((uid) => uid.trim().length > 0)
       )
@@ -269,20 +269,36 @@ export function CreateTaskDialog({
 
                   <button
                     type="button"
-                    disabled
-                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/[0.08] px-3 text-[13px] text-zinc-600 opacity-70"
+                    onClick={() => {
+                      setAuthorPlatform("douyin")
+                      setAuthorCollectAction(null)
+                    }}
+                    className={cn(
+                      "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
+                      authorPlatform === "douyin"
+                        ? "border-white/30 bg-white/[0.10] text-zinc-100"
+                        : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                    )}
                   >
                     <CircleDot className="size-3.5 shrink-0" />
-                    <span>抖音（暂未支持）</span>
+                    <span>抖音</span>
                   </button>
 
                   <button
                     type="button"
-                    disabled
-                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/[0.08] px-3 text-[13px] text-zinc-600 opacity-70"
+                    onClick={() => {
+                      setAuthorPlatform("xiaohongshu")
+                      setAuthorCollectAction(null)
+                    }}
+                    className={cn(
+                      "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] transition-colors",
+                      authorPlatform === "xiaohongshu"
+                        ? "border-white/30 bg-white/[0.10] text-zinc-100"
+                        : "border-white/[0.12] text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                    )}
                   >
                     <CircleDot className="size-3.5 shrink-0" />
-                    <span>小红书（暂未支持）</span>
+                    <span>小红书</span>
                   </button>
                 </div>
               </div>
@@ -328,14 +344,14 @@ export function CreateTaskDialog({
                 <div>
                   <div className="mb-2 flex items-center justify-between">
                     <p className="text-xs tracking-[0.12em] uppercase text-zinc-500">
-                      作者 UID
+                      {authorPlatform === "bilibili" ? "作者 UID" : "作者链接 / ID"}
                     </p>
                     <button
                       type="button"
                       onClick={addAuthorUidField}
                       className="inline-flex h-7 items-center gap-1 rounded-full border border-white/[0.12] px-2.5 text-xs text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-zinc-200"
                     >
-                      <Plus className="size-3.5" />
+                      <Plus className="size-3.5 shrink-0" />
                       <span>添加</span>
                     </button>
                   </div>
@@ -345,7 +361,13 @@ export function CreateTaskDialog({
                         <input
                           value={uid}
                           onChange={(event) => updateAuthorUid(index, event.target.value)}
-                          placeholder={`请输入作者 UID ${index + 1}`}
+                          placeholder={
+                            authorPlatform === "bilibili"
+                              ? `请输入作者 UID ${index + 1}（纯数字）`
+                              : authorPlatform === "douyin"
+                                ? `请输入作者主页链接或 sec_user_id ${index + 1}`
+                                : `请输入作者主页链接或 user_id ${index + 1}`
+                          }
                           className="h-9 w-full rounded-full border border-white/[0.12] bg-white/[0.03] px-4 text-[13px] text-zinc-200 placeholder:text-zinc-500 outline-none transition-colors focus:border-white/[0.22] focus:bg-white/[0.06]"
                         />
                         <button

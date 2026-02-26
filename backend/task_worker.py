@@ -10,7 +10,7 @@ from app import (
     ensure_material_tree,
 )
 from longmao_parser import normalize_platform_type
-from main import collect_bili_author_materials, selective_download_bili_author_videos
+from main import collect_bili_author_materials, collect_douyin_author_materials, collect_xhs_author_materials, selective_download_bili_author_videos
 from task_store import (
     append_task_log,
     now_iso,
@@ -107,12 +107,12 @@ def _run_collect_author_task(task_id: str, task: dict[str, Any]) -> None:
     total = max(len(uids) * 2, 1)
     set_task_progress(task_id, 0, total)
 
-    if platform != "bilibili":
-        append_task_log(task_id, "当前仅支持 B站 指定作者采集")
+    if platform not in {"bilibili", "douyin", "xiaohongshu"}:
+        append_task_log(task_id, f"不支持的平台: {platform}")
         update_task_record(
             task_id,
             status="failed",
-            error="当前仅支持 B站 指定作者采集",
+            error=f"不支持的平台: {platform}",
             ended_at=now_iso(),
         )
         set_task_progress(task_id, total, total)
@@ -141,9 +141,10 @@ def _run_collect_author_task(task_id: str, task: dict[str, Any]) -> None:
         return
 
     ensure_material_tree()
-    bilibili_root = MATERIALS_ROOT / PLATFORM_DIRS["bilibili"]
-    undownloaded_root = bilibili_root / BILIBILI_UNDOWNLOADED_AUTHOR_DIR
-    downloaded_root = bilibili_root / "指定作者"
+    platform_display = PLATFORM_DIRS.get(platform, platform)
+    platform_root = MATERIALS_ROOT / platform_display
+    undownloaded_root = platform_root / "已采集未下载作者"
+    downloaded_root = platform_root / "指定作者"
     append_task_log(task_id, f"开始执行指定作者采集，UID 数: {len(uids)}")
 
     uid_results: list[dict[str, Any]] = []
@@ -151,18 +152,36 @@ def _run_collect_author_task(task_id: str, task: dict[str, Any]) -> None:
         set_task_progress(task_id, (index - 1) * 2 + 1, total)
         append_task_log(task_id, f"正在处理 UID {uid} ({index}/{len(uids)})")
         try:
-            author_result = collect_bili_author_materials(
-                uid=uid,
-                undownloaded_root=undownloaded_root,
-                collect_mode=collect_action,  # type: ignore[arg-type]
-                downloaded_root=downloaded_root,
-            )
+            if platform == "bilibili":
+                author_result = collect_bili_author_materials(
+                    uid=uid,
+                    undownloaded_root=undownloaded_root,
+                    collect_mode=collect_action,  # type: ignore[arg-type]
+                    downloaded_root=downloaded_root,
+                )
+            elif platform == "douyin":
+                author_result = collect_douyin_author_materials(
+                    author_input=uid,
+                    undownloaded_root=undownloaded_root,
+                    collect_mode=collect_action,  # type: ignore[arg-type]
+                    downloaded_root=downloaded_root,
+                )
+            elif platform == "xiaohongshu":
+                author_result = collect_xhs_author_materials(
+                    author_input=uid,
+                    undownloaded_root=undownloaded_root,
+                    collect_mode=collect_action,  # type: ignore[arg-type]
+                    downloaded_root=downloaded_root,
+                )
+            else:
+                author_result = {"ok": False, "error": f"不支持的平台: {platform}"}
+
             normalized_item = {
                 "success": bool(author_result.get("ok")),
                 "uid": uid,
                 "collect_action": collect_action,
-                "platform": "bilibili",
-                "platform_display_name": PLATFORM_DIRS["bilibili"],
+                "platform": platform,
+                "platform_display_name": platform_display,
                 "error": author_result.get("error"),
                 "crawler_error": author_result.get("crawler_error"),
                 "total_count": author_result.get("total_count", 0),
@@ -186,8 +205,8 @@ def _run_collect_author_task(task_id: str, task: dict[str, Any]) -> None:
                     "success": False,
                     "uid": uid,
                     "collect_action": collect_action,
-                    "platform": "bilibili",
-                    "platform_display_name": PLATFORM_DIRS["bilibili"],
+                    "platform": platform,
+                    "platform_display_name": platform_display,
                     "error": f"执行异常: {e}",
                     "total_count": 0,
                     "success_count": 0,

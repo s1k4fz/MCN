@@ -1,0 +1,103 @@
+{
+  "id": "b35fae1bf16e446db765fc5f029dfd41",
+  "kind": "collect-author",
+  "task_type": "collect",
+  "collect_mode": "author",
+  "title": "https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search",
+  "description": "按作者 UID 执行采集流程。",
+  "status": "completed",
+  "progress": {
+    "current": 2,
+    "total": 2,
+    "percent": 100
+  },
+  "created_at": "2026-02-26T13:25:19",
+  "updated_at": "2026-02-26T13:25:57",
+  "started_at": "2026-02-26T13:25:19",
+  "ended_at": "2026-02-26T13:25:57",
+  "worker_pid": 84124,
+  "payload": {
+    "platform": "xiaohongshu",
+    "collect_action": "collect-download",
+    "uids": [
+      "https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search"
+    ],
+    "title": "https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search",
+    "description": "按作者 UID 执行采集流程。"
+  },
+  "results": [
+    {
+      "success": true,
+      "uid": "https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search",
+      "collect_action": "collect-download",
+      "platform": "xiaohongshu",
+      "platform_display_name": "小红书",
+      "error": null,
+      "crawler_error": null,
+      "total_count": 5,
+      "success_count": 0,
+      "failure_count": 5,
+      "details": [
+        {
+          "success": false,
+          "mode": "collect-download",
+          "uid": "6620aafc0000000007004139",
+          "title": "ADVX2025通过啦！来看看我的故事吧！",
+          "video_folder": "ADVX2025通过啦！来看看我的故事吧！_4",
+          "csv_file": "video_data.csv",
+          "error": "解析失败: 业务报错: 提取失败！App支持更多功能，插件版支持主页提取，快去试试吧！"
+        },
+        {
+          "success": false,
+          "mode": "collect-download",
+          "uid": "6620aafc0000000007004139",
+          "title": "用公式推演你我在AI时代的命运",
+          "video_folder": "用公式推演你我在AI时代的命运_4",
+          "csv_file": "video_data.csv",
+          "error": "解析失败: 业务报错: 提取失败！App支持更多功能，插件版支持主页提取，快去试试吧！"
+        },
+        {
+          "success": false,
+          "mode": "collect-download",
+          "uid": "6620aafc0000000007004139",
+          "title": "潮水退去：AI产品的壁垒究竟在哪里？",
+          "video_folder": "潮水退去：AI产品的壁垒究竟在哪里？_4",
+          "csv_file": "video_data.csv",
+          "error": "解析失败: 业务报错: 提取失败！App支持更多功能，插件版支持主页提取，快去试试吧！"
+        },
+        {
+          "success": false,
+          "mode": "collect-download",
+          "uid": "6620aafc0000000007004139",
+          "title": "AI正在颠覆计算机的学习路径",
+          "video_folder": "AI正在颠覆计算机的学习路径_4",
+          "csv_file": "video_data.csv",
+          "error": "解析失败: 业务报错: 提取失败！App支持更多功能，插件版支持主页提取，快去试试吧！"
+        },
+        {
+          "success": false,
+          "mode": "collect-download",
+          "uid": "6620aafc0000000007004139",
+          "title": "你的下一本书，何必是图书？——Refbook",
+          "video_folder": "你的下一本书，何必是图书？——Refbook_4",
+          "csv_file": "video_data.csv",
+          "error": "解析失败: 业务报错: 提取失败！App支持更多功能，插件版支持主页提取，快去试试吧！"
+        }
+      ]
+    }
+  ],
+  "result_summary": {
+    "total_count": 1,
+    "success_count": 1,
+    "failure_count": 0
+  },
+  "error": null,
+  "logs": [
+    "[13:25:19] 任务已加入后台队列，待处理 UID 数: 1",
+    "[13:25:19] 后台任务已启动",
+    "[13:25:19] 开始执行指定作者采集，UID 数: 1",
+    "[13:25:19] 正在处理 UID https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search (1/1)",
+    "[13:25:57] UID https://www.xiaohongshu.com/user/profile/6620aafc0000000007004139?xsec_token=ABFQIMI_Tcp4m-LATV7qcHxFvLnKHtfFBTdrWsJo21Kps%3D&xsec_source=pc_search 处理成功（成功 0 条）",
+    "[13:25:57] 任务结束: 成功 1 / 失败 0"
+  ]
+}
